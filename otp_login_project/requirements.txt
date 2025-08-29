@@ -4,5 +4,4 @@ werkzeug
 itsdangerous
 click
 jinja2
-Flask==2.x.x  # tu versión específica
-gunicorn      # para producción
+
