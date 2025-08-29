@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Panel Admin Dashboard</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<style>
+/* ------------------------- */
+/* Reset y estilos base      */
+/* ------------------------- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: #f4f7fc;
+    display: flex;
+    height: 100vh;
+    color: #333;
+}
+
+/* ------------------------- */
+/* Sidebar                  */
+/* ------------------------- */
+.sidebar {
+    width: 220px;
+    background: #002366;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 20px;
+    transition: width 0.3s ease;
+}
+
+.sidebar.collapsed { width: 60px; }
+
+.sidebar .profile-img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    object-fit: cover;
+    border: 3px solid #fff;
+    transition: all 0.3s ease;
+}
+
+.sidebar.collapsed .profile-img { width: 40px; height: 40px; margin-bottom: 5px; }
+
+.sidebar h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar.collapsed h2 { opacity: 0; }
+
+.sidebar a {
+    width: 100%;
+    padding: 15px 20px;
+    color: #fff;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: background 0.2s;
+}
+
+.sidebar a:hover,
+.sidebar a.active { background: #001f4d; }
+
+#toggleSidebar {
+    margin: 10px 0;
+    background: #001f4d;
+    border: none;
+    color: #fff;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* ------------------------- */
+/* Wrapper general           */
+/* ------------------------- */
+.main-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column; /* contadores arriba, contenido debajo */
+}
+
+/* ------------------------- */
+/* Contadores               */
+/* ------------------------- */
+.counters-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    padding: 20px;
+    background: #f4f7fc;
+    border-bottom: 1px solid #e0e0e0;
+    flex-wrap: wrap;
+}
+
+.counter-card {
+    background: #fff;
+    padding: 25px 40px;
+    border-radius: 15px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    text-align: center;
+    min-width: 200px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.counter-card h3 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #002366;
+    margin-bottom: 10px;
+}
+
+.counter-card span {
+    font-size: 1.7rem;
+    font-weight: bold;
+    color: #001f4d;
+}
+
+.counter-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+}
+
+/* ------------------------- */
+/* Main content             */
+/* ------------------------- */
+.main-content {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    transition: margin-left 0.3s ease;
+}
+
+body.sidebar-collapsed .main-content { margin-left: 60px; }
+
+/* Tarjetas internas */
+.card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+}
+
+.card h2 {
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    color: #002366;
+}
+
+/* Tablas */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+img { max-width: 70px; border-radius: 50%; }
+
+/* Intentos de login */
+.intento-alto { background-color: #f8d7da; }
+.intento-medio { background-color: #fff3cd; }
+.intento-bajo { background-color: #d4edda; }
+
+/* ------------------------- */
+/* Responsive               */
+/* ------------------------- */
+@media (max-width: 768px) {
+    .sidebar { width: 60px; }
+    .sidebar h2, .sidebar a { display: none; }
+    .main-content { padding: 10px; }
+}
+
+@media (max-width: 600px) {
+    .counters-container {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="sidebar" id="sidebar">
+    <img src="{{ url_for('static', filename='imagenes/login1.png') }}" class="profile-img" alt="Usuario">
+    <h2>{{ session['username'] }}</h2>
+    <button id="toggleSidebar">≡</button>
+    <a href="#" onclick="showSection('recargas', event)">Recargas</a>
+    <a href="#" onclick="showSection('retiros', event)">Retiros</a>
+    <a href="#" onclick="showSection('intentos', event)">Intentos</a>
+    <a href="#" onclick="showSection('invitaciones', event)">Invitaciones</a>
+    <a href="#" onclick="showSection('pedidos', event)">Pedidos</a>
+    <a href="#" onclick="showSection('totales', event)">Totales</a>
+    <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+    
+</div>
+
+
+    <div class="main-wrapper">
+        <!-- Contadores en fila -->
+        <div class="counters-container">
+            <div class="counter-card">
+                <h3>Admins conectados</h3>
+                <span id="admins_conectados">{{ admins_conectados }}</span>
+            </div>
+            <div class="counter-card">
+                <h3>Usuarios conectados</h3>
+                <span id="usuarios_conectados">{{ usuarios_conectados }}</span>
+            </div>
+        </div>
+<div style="text-align:center; margin:10px 0;">
+    <button id="btnActualizar" style="padding:8px 12px; border-radius:5px; border:none; background:#001f4d; color:#fff; cursor:pointer;">🔄 Actualizar Página</button>
+</div>
+
+
+
+<div class="main-content">
+
+    <!-- Recargas -->
+    <div id="recargas" class="section" style="display:none;">
+        <div class="card">
+            <h2>Recargas Pendientes ({{ recargas|length }})</h2>
+            {% if recargas %}
+            <table>
+                <thead><tr><th>ID</th><th>Usuario</th><th>Monto</th><th>Imagen</th><th>Acciones</th></tr></thead>
+                <tbody>
+                {% for r in recargas %}
+                <tr>
+                    <td>{{ r.id }}</td>
+                    <td>{{ r.username }}</td>
+                    <td>{{ r.monto }}</td>
+                    <td>{% if r.imagen %}<img src="{{ url_for('static', filename=r.imagen.split('static/')[1]) }}">{% endif %}</td>
+                    <td>
+                        <form action="{{ url_for('aprobar_recarga', recarga_id=r.id) }}" method="post" style="display:inline;"><button>✅</button></form>
+                        <form action="{{ url_for('rechazar_recarga', recarga_id=r.id) }}" method="post" style="display:inline;"><button>❌</button></form>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}<p>No hay recargas pendientes</p>{% endif %}
+        </div>
+    </div>
+
+    <!-- Retiros -->
+    <div id="retiros" class="section" style="display:none;">
+        <div class="card">
+            <h2>Retiros Pendientes ({{ retiros|length }})</h2>
+            {% if retiros %}
+            <table>
+                <thead><tr><th>ID</th><th>Usuario</th><th>Monto</th><th>Acciones</th></tr></thead>
+                <tbody>
+                {% for r in retiros %}
+                <tr>
+                    <td>{{ r.id }}</td>
+                    <td>{{ r.username }}</td>
+                    <td>{{ r.monto }}</td>
+                    <td>
+                        <form action="{{ url_for('aprobar_retiro', retiro_id=r.id) }}" method="post" style="display:inline;"><button>✅</button></form>
+                        <form action="{{ url_for('rechazar_retiro', retiro_id=r.id) }}" method="post" style="display:inline;"><button>❌</button></form>
+                    </td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}<p>No hay retiros pendientes</p>{% endif %}
+        </div>
+    </div>
+
+    <!-- Intentos -->
+    <div id="intentos" class="section" style="display:none;">
+        <div class="card">
+            <h2>Intentos de Login ({{ intentos|length }})</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Teléfono</th>
+                        <th>Intentos</th>
+                        <th>Último intento</th>
+                        <th>IP</th>
+                        <th>Hora del intento</th>
+                        <th>Nivel de riesgo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for i in intentos %}
+                    <tr class="{% if i.attempts >= 5 %}intento-alto{% elif i.attempts >= 3 %}intento-medio{% else %}intento-bajo{% endif %}">
+                        <td>{{ i.phone }}</td>
+                        <td>{{ i.attempts }} {% if i.attempts >= 5 %}⚠️ Intruso{% endif %}</td>
+                        <td>{{ i.last_attempt }}</td>
+                        <td>{{ i.ip or 'N/A' }}</td>
+                        <td>{{ i.attempt_hour or 'N/A' }}:00</td>
+                        <td>{% if i.attempts >= 5 %}Alto{% elif i.attempts >= 3 %}Medio{% else %}Bajo{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+<!-- Invitaciones -->
+<div id="invitaciones" class="section" style="display:none;">
+    <div class="card">
+        <h2>Invitaciones ({{ invitaciones|length }})</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Código</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for inv in invitaciones %}
+                <tr>
+                    <td>{{ inv.id }}</td>
+                    <td>
+                        <form action="{{ url_for('update_invitation', inv_id=inv.id) }}" method="POST" style="display:flex; gap:5px; justify-content:center;">
+                            <input type="text" name="code" value="{{ inv.code }}" required>
+                            <button type="submit" style="padding:5px 10px; border:none; border-radius:5px; background:#001f4d; color:#fff; cursor:pointer;">💾 Guardar</button>
+                        </form>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="3" style="text-align:center;">No hay invitaciones registradas</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div id="pedidos" class="section" style="display:none;">
+  <div class="card">
+    <h2>Pedidos con Usuario NULL</h2>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div style="margin-bottom:15px; text-align:center;">
+          {% for category, message in messages %}
+            <span style="display:inline-block; padding:10px 20px; border-radius:5px; 
+                         background: {% if category=='success' %}#4CAF50{% else %}#f44336{% endif %}; 
+                         color:#fff; font-weight:bold; margin-bottom:5px;">
+              {{ message }}
+            </span>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <form id="formPedidosNull">
+      <input type="hidden" name="section" value="pedidos">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Nombre</th>
+            <th>Monto</th>
+            <th>Total</th>
+            <th>Comisión</th>
+            <th>Estado</th>
+            <th>Fecha Límite</th>
+            <th>VIP Nivel</th>
+            <th>Descripción</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if pedidos %}
+            {% for p in pedidos %}
+            <tr>
+              <td>{{ p.id }}</td>
+              <td><input type="text" name="username_{{ p.id }}" value="{{ p.username or '' }}"></td>
+              <td><input type="text" name="nombre_{{ p.id }}" value="{{ p.nombre or '' }}"></td>
+              <td><input type="number" step="any" name="monto_{{ p.id }}" value="{{ p.monto or 0 }}"></td>
+              <td><input type="number" step="any" name="total_{{ p.id }}" value="{{ p.total or 0 }}"></td>
+              <td><input type="number" step="any" name="comision_{{ p.id }}" value="{{ p.comision or 0 }}"></td>
+              <td>
+                <select name="estado_{{ p.id }}">
+                  <option value="Pendiente" {% if p.estado=='Pendiente' %}selected{% endif %}>Pendiente</option>
+                  <option value="Completado" {% if p.estado=='Completado' %}selected{% endif %}>Completado</option>
+                  <option value="Congelado" {% if p.estado=='Congelado' %}selected{% endif %}>Congelado</option>
+                </select>
+              </td>
+              <td><input type="datetime-local" name="fecha_limite_{{ p.id }}" value="{{ p.fecha_limite.replace(' ', 'T') if p.fecha_limite else '' }}"></td>
+              <td><input type="number" name="vip_nivel_{{ p.id }}" value="{{ p.vip_nivel or 0 }}"></td>
+              <td><input type="text" name="descripcion_{{ p.id }}" value="{{ p.descripcion or '' }}"></td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="10" style="text-align:center; font-style:italic;">No hay pedidos con usuario NULL o vacío.</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+
+      <div style="margin-top:20px; text-align:center;">
+        <input type="number" name="horas_limite" value="24" min="1" max="168">
+        <button type="submit" style="padding:10px 20px; border:none; border-radius:5px; background:#4a90e2; color:#fff; cursor:pointer; font-weight:bold;">
+          Actualizar fechas
+        </button>
+        <button type="button" id="btnActualizarTodos" style="padding:10px 20px; border:none; border-radius:5px; background:#001f4d; color:#fff; cursor:pointer; font-weight:bold;">
+          💾 Actualizar todos los pedidos
+        </button>
+      </div>
+    </form>
+    <div id="mensajePedidos" style="text-align:center; margin-top:10px;"></div>
+
+  </div>
+</div>
+
+
+
+
+    <!-- Totales -->
+    <div id="totales" class="section" style="display:none;">
+        <div class="card">
+            <h2>💰 Totales</h2>
+            <p id="totalesInfo">Haz clic en "Totales" para cargar los datos.</p>
+        </div>
+    </div>
+
+
+
+
+
+
+<script>
+        // Mostrar sección
+            function showSection(sectionId, event){
+                document.querySelectorAll('.section').forEach(s => s.style.display = 'none');
+                document.getElementById(sectionId).style.display = 'block';
+                document.querySelectorAll('.sidebar a').forEach(a => a.classList.remove('active'));
+                if(event) event.target.classList.add('active');
+
+       
+
+        // Mostrar totales de recargas y retiros
+            if(sectionId === 'totales'){
+                fetch('/admin/totales')
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('totalesInfo').innerText =
+                        `Total Recargas: S/${data.recargas} - Total Retiros: S/${data.retiros} - Total Neto: S/${data.neto}`;
+                })
+                .catch(err => console.error(err));
+            }
+        }
+
+         // Toggle sidebar
+            document.getElementById('toggleSidebar').addEventListener('click', () => {
+                document.getElementById('sidebar').classList.toggle('collapsed');
+            });
+</script>
+
+
+
+
+<script>
+const formPedidos = document.getElementById('formPedidosNull');
+const mensajeDiv = document.getElementById('mensajePedidos');
+
+formPedidos.addEventListener('submit', e => {
+    e.preventDefault();
+    const formData = new FormData(formPedidos);
+    fetch('{{ url_for("pedidos_null") }}', {
+        method: 'POST',
+        body: formData
+    })
+    .then(r => r.json())
+    .then(data => {
+        if(data.success){
+            mensajeDiv.innerHTML = `<span style="color:green; font-weight:bold;">${data.message}</span>`;
+            document.querySelector('#pedidos table tbody').innerHTML = data.html;
+        } else {
+            mensajeDiv.innerHTML = `<span style="color:red; font-weight:bold;">${data.message}</span>`;
+        }
+    })
+    .catch(err => console.error(err));
+});
+
+// Botón "Actualizar todos"
+document.getElementById('btnActualizarTodos').addEventListener('click', () => {
+    const formData = new FormData(formPedidos);
+    formData.set('horas_limite', 0); // indica actualizar todos
+    fetch('{{ url_for("pedidos_null") }}', { method:'POST', body: formData })
+        .then(r=>r.json())
+        .then(data=>{
+            if(data.success){
+                mensajeDiv.innerHTML = `<span style="color:green; font-weight:bold;">${data.message}</span>`;
+                document.querySelector('#pedidos table tbody').innerHTML = data.html;
+            }
+        });
+});
+
+
+
+
+
+
+
+
+// Ping admin
+function enviarPingAdmin() {
+    fetch('/admin/ping', { method:'POST' });
+}
+
+// Ping user
+function enviarPingUser() {
+    fetch('/user/ping', { method:'POST' });
+}
+
+// Actualizar contadores
+function actualizarAdmins() {
+    fetch('/admin/admins_conectados').then(r=>r.json()).then(d=>{
+        document.getElementById('admins_conectados').innerText=d.admins_conectados;
+    });
+}
+function actualizarUsuarios() {
+    fetch('/admin/usuarios_conectados').then(r=>r.json()).then(d=>{
+        document.getElementById('usuarios_conectados').innerText=d.usuarios_conectados;
+    });
+}
+
+// Ejecutar todo cada 5s
+function actualizarTodo() {
+    enviarPingAdmin();
+    enviarPingUser()
+    actualizarAdmins();
+    actualizarUsuarios();
+}
+actualizarTodo();
+setInterval(actualizarTodo,30000);
+</script>
+<script>
+document.getElementById('btnActualizar').addEventListener('click', () => {
+    location.reload();
+});
+</script>
+
+</body>
+</html>

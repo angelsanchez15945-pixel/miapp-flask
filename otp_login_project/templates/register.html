@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Registro</title>
+<script src="{{ url_for('static', filename='session.js') }}"></script>
+<link rel="icon" href="static/imagenes/titulo.ico" type="image/x-icon">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/6.6.6/css/flag-icons.min.css"/>
+
+<style>
+body {
+    background: #f0f3f5;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.form-container {
+    background: white;
+    padding: 30px;
+    border-radius: 12px;
+    width: 340px;
+    box-shadow: 0px 0px 15px rgba(0,0,0,0.15);
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form-container h2 {
+    margin-bottom: 20px;
+    color: #002366;
+}
+
+.form-container input, .form-container select {
+    width: 90%;
+    padding: 12px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+    text-align: left;
+    box-sizing: border-box;
+}
+
+.form-container button {
+    width: 90%;
+    padding: 12px;
+    background: #002366;
+    color: white;
+    border: none;
+    border-radius: 40px;
+    font-weight: bold;
+    margin-top: 15px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+.form-container button:hover {
+    background: #001f4d;
+}
+
+.login-link {
+    display: block;
+    margin-top: 10px;
+    color: #002366;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+/* ALERTA PEQUEÑA */
+.swal-small {
+    width: 280px !important;
+    font-size: 14px;
+    padding: 1em;
+    text-align: center;
+}
+
+/* Selector de país con banderas */
+select option {
+    padding-left: 25px;
+}
+.flag-icon {
+    margin-right: 8px;
+}
+
+/* Bottom nav */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: white;
+  border-top: 1px solid #ccc;
+  display: flex;
+  justify-content: space-around;
+  padding: 5px 0;
+  z-index: 1000;
+}
+.bottom-nav .nav-item {
+  text-align: center;
+  color: #777;
+  text-decoration: none;
+  font-size: 12px;
+  flex: 1;
+}
+.bottom-nav .nav-item i {
+  display: block;
+  font-size: 24px;
+  margin-bottom: 2px;
+}
+.bottom-nav .nav-item.active,
+.bottom-nav .nav-item:hover {
+  color: #007bff;
+}
+
+</style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>REGISTRO</h2>
+    <form id="registerForm" method="POST">
+        <input type="text" name="username" placeholder="Usuario" required>
+        <div style="position:relative;">
+            <select name="country_code" id="countryCode" required>
+            <option value="+1" data-minlength="10">+1 Estados Unidos / Canadá</option>
+            <option value="+7" data-minlength="10">+7 Rusia / Kazajistán</option>
+            <option value="+20" data-minlength="9">+20 Egipto</option>
+            <option value="+27" data-minlength="9">+27 Sudáfrica</option>
+            <option value="+30" data-minlength="10">+30 Grecia</option>
+            <option value="+31" data-minlength="9">+31 Países Bajos</option>
+            <option value="+32" data-minlength="9">+32 Bélgica</option>
+            <option value="+33" data-minlength="9">+33 Francia</option>
+            <option value="+34" data-minlength="9">+34 España</option>
+            <option value="+36" data-minlength="9">+36 Hungría</option>
+            <option value="+39" data-minlength="10">+39 Italia</option>
+            <option value="+44" data-minlength="10">+44 Reino Unido</option>
+            <option value="+49" data-minlength="10">+49 Alemania</option>
+            <option value="+51" data-minlength="9">+51 Perú</option>
+            <option value="+52" data-minlength="10">+52 México</option>
+            <option value="+54" data-minlength="10">+54 Argentina</option>
+            <option value="+55" data-minlength="11">+55 Brasil</option>
+            <option value="+56" data-minlength="9">+56 Chile</option>
+            <option value="+57" data-minlength="10">+57 Colombia</option>
+            <option value="+58" data-minlength="10">+58 Venezuela</option>
+            <option value="+60" data-minlength="9">+60 Malasia</option>
+            <option value="+61" data-minlength="9">+61 Australia</option>
+            <option value="+62" data-minlength="10">+62 Indonesia</option>
+            <option value="+63" data-minlength="10">+63 Filipinas</option>
+            <option value="+64" data-minlength="8">+64 Nueva Zelanda</option>
+            <option value="+65" data-minlength="8">+65 Singapur</option>
+            <option value="+66" data-minlength="9">+66 Tailandia</option>
+            <option value="+81" data-minlength="10">+81 Japón</option>
+            <option value="+82" data-minlength="10">+82 Corea del Sur</option>
+            <option value="+84" data-minlength="9">+84 Vietnam</option>
+            <option value="+86" data-minlength="11">+86 China</option>
+            <option value="+90" data-minlength="10">+90 Turquía</option>
+            <option value="+91" data-minlength="10">+91 India</option>
+            <option value="+92" data-minlength="10">+92 Pakistán</option>
+            <option value="+93" data-minlength="9">+93 Afganistán</option>
+            <option value="+94" data-minlength="9">+94 Sri Lanka</option>
+            <option value="+95" data-minlength="9">+95 Myanmar</option>
+            <option value="+98" data-minlength="10">+98 Irán</option>
+            <option value="+211" data-minlength="9">+211 Sudán del Sur</option>
+            <option value="+212" data-minlength="9">+212 Marruecos</option>
+            <option value="+213" data-minlength="9">+213 Argelia</option>
+            <option value="+216" data-minlength="8">+216 Túnez</option>
+            <option value="+218" data-minlength="9">+218 Libia</option>
+            <option value="+220" data-minlength="7">+220 Gambia</option>
+            <option value="+221" data-minlength="9">+221 Senegal</option>
+            <option value="+222" data-minlength="8">+222 Mauritania</option>
+            <option value="+223" data-minlength="8">+223 Malí</option>
+            <option value="+224" data-minlength="8">+224 Guinea</option>
+            <option value="+225" data-minlength="10">+225 Costa de Marfil</option>
+            <option value="+226" data-minlength="8">+226 Burkina Faso</option>
+            <option value="+227" data-minlength="8">+227 Níger</option>
+            <option value="+228" data-minlength="8">+228 Togo</option>
+            <option value="+229" data-minlength="8">+229 Benín</option>
+            <option value="+230" data-minlength="8">+230 Mauricio</option>
+            <option value="+231" data-minlength="9">+231 Liberia</option>
+            <option value="+232" data-minlength="9">+232 Sierra Leona</option>
+            <option value="+233" data-minlength="9">+233 Ghana</option>
+            <option value="+234" data-minlength="10">+234 Nigeria</option>
+            <option value="+235" data-minlength="8">+235 Chad</option>
+            <option value="+236" data-minlength="8">+236 República Centroafricana</option>
+            <option value="+237" data-minlength="9">+237 Camerún</option>
+            <option value="+238" data-minlength="7">+238 Cabo Verde</option>
+            <option value="+239" data-minlength="7">+239 Santo Tomé y Príncipe</option>
+            <option value="+240" data-minlength="9">+240 Guinea Ecuatorial</option>
+            <option value="+241" data-minlength="9">+241 Gabón</option>
+            <option value="+242" data-minlength="9">+242 Congo</option>
+            <option value="+243" data-minlength="9">+243 Congo DR</option>
+            <option value="+244" data-minlength="9">+244 Angola</option>
+            <option value="+245" data-minlength="9">+245 Guinea-Bissau</option>
+            <option value="+246" data-minlength="7">+246 Diego García</option>
+            </select>
+        </div>
+        <input type="text" name="phone" id="phone" placeholder="Número de teléfono" required>
+        <input type="password" name="password" placeholder="Contraseña" required>
+        <input type="password" name="confirm_password" placeholder="Confirme su contraseña" required>
+        <input type="text" name="invite_code" placeholder="Código de invitación" required>
+        <button type="submit">Registrarse</button>
+    </form>
+    <a class="login-link" href="/login1">¿Ya tienes cuenta? Inicia sesión</a>
+</div>
+
+<script>
+// Referencias
+const countrySelect = document.getElementById('countryCode');
+const phoneInput = document.getElementById('phone');
+
+// Actualizar límites de teléfono según país
+function actualizarPhoneLimits() {
+    const selectedOption = countrySelect.options[countrySelect.selectedIndex];
+    const minLen = parseInt(selectedOption.dataset.minlength);
+    phoneInput.minLength = minLen;
+    phoneInput.maxLength = minLen;
+    phoneInput.value = phoneInput.value.slice(0, minLen);
+}
+
+countrySelect.addEventListener('change', actualizarPhoneLimits);
+actualizarPhoneLimits();
+
+// Validación al enviar
+document.getElementById('registerForm').addEventListener('submit', async function(e){
+    e.preventDefault();
+    const form = e.target;
+    const selectedOption = countrySelect.options[countrySelect.selectedIndex];
+    const minLength = parseInt(selectedOption.dataset.minlength);
+    const phone = phoneInput.value.trim();
+
+    if (phone.length < minLength) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Número inválido',
+            text: `El número debe tener exactamente ${minLength} dígitos según el país seleccionado.`,
+            customClass: { popup: 'swal-small' }
+        });
+        return;
+    }
+
+    form.submit(); // enviar formulario si pasa validación
+});
+</script>
+
+{% if alerta %}
+<script>
+    Swal.fire({
+        icon: '{{ alerta.tipo }}',
+        title: '{{ alerta.titulo }}',
+        text: '{{ alerta.mensaje }}',
+        customClass: { popup: 'swal-small' }
+    });
+</script>
+{% endif %}
+
+{% if alerta %}
+<script>
+Swal.fire({
+    icon: '{{ alerta.tipo }}',
+    title: '{{ alerta.titulo }}',
+    text: '{{ alerta.mensaje }}',
+    confirmButtonColor: '#002366'
+});
+</script>
+{% endif %}
+
+</body>
+</html>

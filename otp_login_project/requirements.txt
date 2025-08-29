@@ -1,0 +1,7 @@
+flask
+gunicorn
+werkzeug
+sqlite3-binary
+itsdangerous
+click
+jinja2

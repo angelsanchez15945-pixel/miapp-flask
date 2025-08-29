@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recargar</title>
+        <link rel="icon" href="static/imagenes/titulo.ico" type="image/x-icon">
+<script src="{{ url_for('static', filename='session.js') }}"></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+        <script src="{{ url_for('static', filename='ping.js') }}"></script>
+    <style>
+        /* RESPONSIVE */
+        @media (max-width: 700px) {
+          .card-grid { grid-template-columns: 1fr; }
+          .partner-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* NAV INFERIOR ------- MOUSE */
+        .bottom-nav {
+          position: fixed;
+          left: 0; right: 0; bottom: 0;
+          display: flex;
+          justify-content: space-around;
+          background: #fff;
+          border-top: 1px solid #e6e6e6;
+          padding: 8px 0;
+          z-index: 999;
+        }
+
+        .nav-item {
+          color: #333;
+          text-decoration: none;
+          font-size: 12px;
+          text-align: center;
+          transition: all 0.25s ease;
+        }
+
+        .nav-item i {
+          display: block;
+          font-size: 22px;
+          margin-bottom: 3px;
+          transition: transform 0.25s ease, color 0.25s ease;
+        }
+
+        /* EFECTO HOVER ---- MOUSE */
+        .nav-item:hover {
+          color: #0044FF;   /* CAMBIAR DE COLOR */
+          transform: scale(1.1);
+          text-shadow: 0 0 6px rgba(15, 234, 245, 0.3);
+        }
+
+        .nav-item:hover i {
+          transform: scale(1.2);
+          color: #0044FF;  /* CAMBIAR DE COLOR */
+        }
+
+
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to top, #f0f4ff, #ffffff);
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: linear-gradient(to right, #3f51b5, #8e24aa);
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+        }
+        .section-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+            font-size: 16px;
+            color: #555;
+        }
+        input[type="text"], input[type="number"], input[type="file"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .copy-btn {
+            background-color: #0b3d91;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+        .copy-btn:hover {
+            background-color: #082b67;
+        }
+        .pay-btn {
+            width: 100%;
+            background-color: #0b3d91;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .pay-btn:hover {
+            background-color: #082b67;
+        }
+    </style>
+</head>
+<body>
+
+<header>RECARGAR</header>
+
+<div class="container">
+    <form action="/procesar_recarga" method="POST" enctype="multipart/form-data">
+
+        <div class="section-title">PEDIDO</div>
+        <input type="text" name="numero_serie" value="{{ recarga.id }}" readonly>
+        <input type="number" name="monto" step="0.01" value="{{ recarga.monto }}" readonly>
+        <input type="text" name="metodo_pago" value="{{ recarga.metodo_pago }}" readonly>
+
+        <div class="section-title">DATOS DE PAGO</div>
+        <label>NOMBRE:</label>
+        <div style="display: flex; gap: 5px;">
+            <input type="text" name="username" value="{{ tarjeta.username }}" readonly>
+            <button type="button" class="copy-btn" onclick="copyPrev(this)">COPIAR</button>
+        </div>
+
+        <label>Cuenta Interbancaria:</label>
+        <div style="display: flex; gap: 5px;">
+            <input type="text" name="numero_cuenta" value="{{ tarjeta.numero_cuenta }}" readonly>
+            <button type="button" class="copy-btn" onclick="copyPrev(this)">COPIAR</button>
+        </div>
+
+        <label>CCI:</label>
+        <div style="display: flex; gap: 5px;">
+            <input type="text" name="cci" value="{{ tarjeta.cci }}" readonly>
+            <button type="button" class="copy-btn" onclick="copyPrev(this)">COPIAR</button>
+        </div>
+
+        <label>Nombre titular cuenta:</label>
+        <div style="display: flex; gap: 5px;">
+            <input type="text" name="nombre_titular" value="{{ tarjeta.nombre_titular }}" readonly>
+            <button type="button" class="copy-btn" onclick="copyPrev(this)">COPIAR</button>
+        </div>
+
+        <label>SUBIR CAPTURA DE PAGO</label>
+        <input type="file" name="captura_pago" accept="image/*" required>
+
+
+
+
+{% if recarga.imagen %}
+    <p>Comprobante subido:</p>
+    <img src="{{ url_for('static', filename=recarga.imagen) }}" width="200">
+{% endif %}
+
+
+
+
+        <button type="submit" class="pay-btn">ENVIAR PAGO</button>
+    </form>
+</div>
+
+
+<!-- SweetAlert2 desde CDN MENSAJE DE ALERTTTA-->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+document.querySelector("form").addEventListener("submit", function(event) {
+    event.preventDefault(); // Evita el envío inmediato
+
+    // Enviar el formulario usando fetch para procesarlo en el servidor
+    let formData = new FormData(this);
+    fetch(this.action, {
+        method: "POST",
+        body: formData
+    }).then(response => {
+        if (response.ok) {
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'El envío se realizó correctamente',
+                text: 'Espere pacientemente la revisión.',
+                showConfirmButton: false,
+                timer: 3000
+            });
+
+            // Redirigir después de 3 segundos
+            setTimeout(() => {
+                window.location.href = "/inicio"; // Ruta a tu inicio.html
+            }, 3000);
+        } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'Hubo un problema al enviar el pago.'
+            });
+                }
+        });
+    });
+</script>
+
+<script>
+function copyPrev(button) {
+    let input = button.previousElementSibling;
+    input.select();
+    input.setSelectionRange(0, 99999);
+    navigator.clipboard.writeText(input.value);
+    alert("Copiado: " + input.value);
+}
+</script>
+
+
+            <!-- NAV INFERIOR -->
+            <nav class="bottom-nav">
+              <a href="{{ url_for('inicio') }}" class="nav-item"><i class="material-icons">home</i><span>INICIO</span></a>
+              <a href="{{ url_for('pedido') }}" class="nav-item"><i class="material-icons">playlist_add_check</i><span>PEDIDO</span></a>
+              <a href="{{ url_for('mision') }}" class="nav-item"><i class="material-icons">assignment</i><span>MISIÓN</span></a>
+              <a href="{{ url_for('recarga') }}" class="nav-item"><i class="material-icons">payment</i><span>RECARGA</span></a>
+              <a href="{{ url_for('yo') }}" class="nav-item"><i class="material-icons">person</i><span>YO</span></a>
+            </nav>
+
+</body>
+</html>

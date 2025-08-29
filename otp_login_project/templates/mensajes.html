@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mensaje del sistema</title>
+        <link rel="icon" href="static/imagenes/titulo.ico" type="image/x-icon">
+<script src="{{ url_for('static', filename='session.js') }}"></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+        <script src="{{ url_for('static', filename='ping.js') }}"></script>
+<style>
+
+
+        /* RESPONSIVE */
+        @media (max-width: 700px) {
+          .card-grid { grid-template-columns: 1fr; }
+          .partner-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* NAV INFERIOR ------- MOUSE */
+        .bottom-nav {
+          position: fixed;
+          left: 0; right: 0; bottom: 0;
+          display: flex;
+          justify-content: space-around;
+          background: #fff;
+          border-top: 1px solid #e6e6e6;
+          padding: 8px 0;
+          z-index: 999;
+        }
+
+        .nav-item {
+          color: #333;
+          text-decoration: none;
+          font-size: 12px;
+          text-align: center;
+          transition: all 0.25s ease;
+        }
+
+        .nav-item i {
+          display: block;
+          font-size: 22px;
+          margin-bottom: 3px;
+          transition: transform 0.25s ease, color 0.25s ease;
+        }
+
+        /* EFECTO HOVER ---- MOUSE */
+        .nav-item:hover {
+          color: #0044FF;   /* CAMBIAR DE COLOR */
+          transform: scale(1.1);
+          text-shadow: 0 0 6px rgba(15, 234, 245, 0.3);
+        }
+
+        .nav-item:hover i {
+          transform: scale(1.2);
+          color: #0044FF;  /* CAMBIAR DE COLOR */
+        }
+
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background: #fff;
+    }
+         /* ----------------------Boton volver */
+        header {
+            background: linear-gradient(90deg, #1a237e, #8e24aa);
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            text-align: center; /* mantiene el texto centrado */
+            position: relative; /* necesario para posicionar el enlace */
+        }
+
+        header .volver {
+            position: absolute;
+            left: 15px; /* margen desde el borde izquierdo */
+            top: 50%;
+            transform: translateY(-50%); /* lo centra verticalmente */
+            color: white; /* o el color que quieras */
+            text-decoration: none;
+        }
+
+
+    .image-container {
+        background: #e3f2fd;
+        padding: 30px;
+        text-align: center;
+    }
+    .image-container img {
+        width: 150px;
+        opacity: 0.8;
+    }
+    .message-section {
+        padding: 15px;
+    }
+    .section-title {
+        font-size: 14px;
+        font-weight: bold;
+        color: #555;
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    .section-title::before {
+        content: "🔊";
+        margin-right: 6px;
+    }
+    .card {
+        padding: 10px 0;
+        border-bottom: 1px solid #eee;
+    }
+    .card-title {
+        font-weight: bold;
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+    .card-text {
+        font-size: 13px;
+        color: #444;
+    }
+
+</style>
+</head>
+<body>
+
+    <header>
+        <a href="/yo" class="volver">            Volver</a>
+        <span>Mensaje</span>
+    </header>
+
+<div class="image-container">
+    <img src="https://cdn-icons-png.flaticon.com/512/1827/1827392.png" alt="Campana">
+</div>
+
+<div class="message-section">
+    <div class="section-title">Anuncio del sistema</div>
+
+    <div class="card">
+        <div class="card-title">Notificación del sistema</div>
+        <div class="card-text">Tu solicitud de recarga: Los $30.00 que recargaste han sido acreditados en tu cuenta.</div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Notificación del sistema</div>
+        <div class="card-text">Su orden de retiro: CO2508060916402821 ¡Retiro exitoso!</div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Notificación del sistema</div>
+        <div class="card-text">Tu solicitud de recarga: Los $10.00 que recargaste han sido acreditados en tu cuenta.</div>
+    </div>
+
+    <div class="card">
+        <div class="card-title">Notificación del sistema</div>
+        <div class="card-text">Tu solicitud de recarga: Los $12.00 que recargaste han sido acreditados en tu cuenta.</div>
+    </div>
+</div>
+
+
+            <!-- NAV INFERIOR -->
+            <nav class="bottom-nav">
+              <a href="{{ url_for('inicio') }}" class="nav-item"><i class="material-icons">home</i><span>INICIO</span></a>
+              <a href="{{ url_for('pedido') }}" class="nav-item"><i class="material-icons">playlist_add_check</i><span>PEDIDO</span></a>
+              <a href="{{ url_for('mision') }}" class="nav-item"><i class="material-icons">assignment</i><span>MISIÓN</span></a>
+              <a href="{{ url_for('recarga') }}" class="nav-item"><i class="material-icons">payment</i><span>RECARGA</span></a>
+              <a href="{{ url_for('yo') }}" class="nav-item"><i class="material-icons">person</i><span>YO</span></a>
+            </nav>
+</body>
+</html>

@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inicio de sesión</title>
+<script src="{{ url_for('static', filename='session.js') }}"></script>
+<link rel="icon" href="static/imagenes/titulo.ico" type="image/x-icon">
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+
+    /* Imagen de fondo que cubre toda la pantalla */
+    background: url('static/imagenes/portada.png') no-repeat center center;
+    background-size: cover; /* Ajusta la imagen al tamaño de la pantalla */
+    background-attachment: fixed; /* Mantiene la imagen fija al hacer scroll */
+    position: relative;
+}
+
+/* Overlay semi-transparente */
+body::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* opacidad ajustable */
+    z-index: -1;
+}
+
+.wrapper {
+    width: 100%;
+    max-width: 350px;
+    text-align: center;
+}
+
+.form-container {
+    background: rgba(255, 255, 255, 0.85); /* semi-transparente */
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Título */
+.form-container h2 {
+    color: #002366;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+/* Fila del teléfono */
+.row {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.row select {
+    flex: 0 0 90px;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.row input {
+    flex: 1;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+/* Password ocupa toda la fila */
+.form-container input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+}
+
+/* Focus */
+.row input:focus, .row select:focus, .form-container input[type="password"]:focus {
+    outline: none;
+    border-color: #002366;
+    box-shadow: 0 0 4px rgba(0,35,102,0.5);
+}
+
+/* Botón */
+.form-container button {
+    background: #002366;
+    color: #fff;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    padding: 12px;
+    border-radius: 40px;
+    font-size: 14px;
+    width: 100%;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.form-container button:hover {
+    background: #001f4d;
+    transform: scale(1.03);
+}
+
+/* Enlace */
+.alt-links {
+    margin-top: 5px;
+}
+
+.alt-links a {
+    color: #002366;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    display: inline-block;
+}
+
+/* Responsive */
+@media (max-width: 450px) {
+    .row select, .row input, .form-container input[type="password"], .form-container button, .alt-links a {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+</style>
+</head>
+<body>
+
+<div class="wrapper">
+    <div class="form-container">
+        <h2>Iniciar sesión</h2>
+        <form id="loginForm" method="POST" action="/login1">
+            <div class="row">
+                <select id="countryCode" name="country_code" required>
+                    <option value="+1" data-minlength="10">+1</option>
+                    <option value="+7" data-minlength="10">+7</option>
+                    <option value="+20" data-minlength="9">+20</option>
+                    <option value="+27" data-minlength="9">+27</option>
+                    <option value="+30" data-minlength="10">+30</option>
+                    <option value="+31" data-minlength="9">+31</option>
+                    <option value="+32" data-minlength="9">+32</option>
+                    <option value="+33" data-minlength="9">+33</option>
+                    <option value="+34" data-minlength="9">+34</option>
+                    <option value="+36" data-minlength="9">+36</option>
+                    <option value="+39" data-minlength="10">+39</option>
+                    <option value="+44" data-minlength="10">+44</option>
+                    <option value="+49" data-minlength="10">+49</option>
+                    <option value="+51" data-minlength="9">+51</option>
+                    <option value="+52" data-minlength="10">+52</option>
+                    <option value="+54" data-minlength="10">+54</option>
+                    <option value="+55" data-minlength="11">+55</option>
+                    <option value="+56" data-minlength="9">+56</option>
+                    <option value="+57" data-minlength="10">+57</option>
+                    <option value="+58" data-minlength="10">+58</option>
+                    <option value="+60" data-minlength="9">+60</option>
+                    <option value="+61" data-minlength="9">+61</option>
+                    <option value="+62" data-minlength="10">+62</option>
+                    <option value="+63" data-minlength="10">+63</option>
+                    <option value="+64" data-minlength="8">+64</option>
+                    <option value="+65" data-minlength="8">+65</option>
+                    <option value="+66" data-minlength="9">+66</option>
+                    <option value="+81" data-minlength="10">+81</option>
+                    <option value="+82" data-minlength="10">+82</option>
+                    <option value="+84" data-minlength="9">+84</option>
+                    <option value="+86" data-minlength="11">+86</option>
+                    <option value="+90" data-minlength="10">+90</option>
+                    <option value="+91" data-minlength="10">+91</option>
+                    <option value="+92" data-minlength="10">+92</option>
+                    <option value="+93" data-minlength="9">+93</option>
+                    <option value="+94" data-minlength="9">+94</option>
+                    <option value="+95" data-minlength="9">+95</option>
+                    <option value="+98" data-minlength="10">+98</option>
+                    <option value="+211" data-minlength="9">+211</option>
+                    <option value="+212" data-minlength="9">+212</option>
+                    <option value="+213" data-minlength="9">+213</option>
+                    <option value="+216" data-minlength="8">+216</option>
+                    <option value="+218" data-minlength="9">+218</option>
+                    <option value="+220" data-minlength="7">+220</option>
+                    <option value="+221" data-minlength="9">+221</option>
+                    <option value="+222" data-minlength="8">+222</option>
+                    <option value="+223" data-minlength="8">+223</option>
+                    <option value="+224" data-minlength="8">+224</option>
+                    <option value="+225" data-minlength="10">+225</option>
+                    <option value="+226" data-minlength="8">+226</option>
+                    <option value="+227" data-minlength="8">+227</option>
+                    <option value="+228" data-minlength="8">+228</option>
+                    <option value="+229" data-minlength="8">+229</option>
+                    <option value="+230" data-minlength="8">+230</option>
+                    <option value="+231" data-minlength="9">+231</option>
+                    <option value="+232" data-minlength="9">+232</option>
+                    <option value="+233" data-minlength="9">+233</option>
+                    <option value="+234" data-minlength="10">+234</option>
+                    <option value="+235" data-minlength="8">+235</option>
+                    <option value="+236" data-minlength="8">+236</option>
+                    <option value="+237" data-minlength="9">+237</option>
+                    <option value="+238" data-minlength="7">+238</option>
+                    <option value="+239" data-minlength="7">+239</option>
+                    <option value="+240" data-minlength="9">+240</option>
+                    <option value="+241" data-minlength="9">+241</option>
+                    <option value="+242" data-minlength="9">+242</option>
+                    <option value="+243" data-minlength="9">+243</option>
+                    <option value="+244" data-minlength="9">+244</option>
+                    <option value="+245" data-minlength="9">+245</option>
+                    <option value="+246" data-minlength="7">+246</option>
+
+                </select>
+                <input type="text" id="phone" name="phone" placeholder="Número de teléfono" required>
+            </div>
+            <input type="password" name="password" placeholder="Contraseña" required>
+            <button type="submit">Iniciar sesión</button>
+        </form>
+        <div class="alt-links">
+            <a href="/register">¿No tienes cuenta? Regístrate</a>
+        </div>
+    </div>
+</div>
+
+<script>
+const countrySelect = document.getElementById('countryCode');
+const phoneInput = document.getElementById('phone');
+
+function actualizarPhoneLimits() {
+    const selectedOption = countrySelect.options[countrySelect.selectedIndex];
+    const minLen = parseInt(selectedOption.dataset.minlength);
+    phoneInput.minLength = minLen;
+    phoneInput.maxLength = minLen;
+    phoneInput.value = phoneInput.value.slice(0, minLen);
+    validarPhone();
+}
+
+function validarPhone() {
+    const minLen = parseInt(countrySelect.options[countrySelect.selectedIndex].dataset.minlength);
+    phoneInput.style.borderColor = phoneInput.value.length === minLen ? "#28a745" : "#dc3545";
+}
+
+countrySelect.addEventListener('change', actualizarPhoneLimits);
+phoneInput.addEventListener('input', validarPhone);
+actualizarPhoneLimits();
+
+document.getElementById('loginForm').addEventListener('submit', function(e){
+    const minLen = parseInt(countrySelect.options[countrySelect.selectedIndex].dataset.minlength);
+    if(phoneInput.value.trim().length !== minLen){
+        e.preventDefault();
+        Swal.fire({
+            icon: 'warning',
+            title: 'Número inválido',
+            text: `El número debe tener exactamente ${minLen} dígitos según el país seleccionado.`,
+            width: 300,
+            confirmButtonColor: '#002366'
+        });
+    }
+});
+</script>
+
+{% if alerta %}
+<script>
+Swal.fire({
+    icon: '{{ alerta.tipo }}',
+    title: '{{ alerta.titulo }}',
+    text: '{{ alerta.mensaje }}',
+    confirmButtonColor: '#002366'
+});
+</script>
+{% endif %}
+
+</body>
+</html>

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Pedidos</title>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<link rel="icon" href="static/imagenes/titulo.ico" type="image/x-icon">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="{{ url_for('static', filename='session.js') }}"></script>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+<script src="{{ url_for('static', filename='ping.js') }}"></script>
+<style>
+body { font-family: Arial, sans-serif; margin: 20px; padding-bottom: 70px; }
+.saldo { font-size: 18px; margin-bottom: 10px; }
+.pedido-card { border: 1px solid #ccc; border-radius: 8px; padding: 10px; margin-bottom: 10px; position: relative; }
+.pedido-header { display: flex; justify-content: space-between; font-weight: bold; }
+.pedido-body { margin-top: 5px; padding-bottom: 50px; }
+.pedido-content { display: flex; align-items: flex-start; gap: 10px; }
+.pedido-content img { width: 120px; height: auto; border-radius: 6px; }
+.pedido-info { flex: 1; }
+.pedido-descripcion { font-size: 0.9em; color: #555; margin-bottom: 5px; }
+.btn-enviar { position: absolute; bottom: 10px; right: 10px; padding: 8px 14px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
+.btn-enviar:disabled { background: #999; cursor: not-allowed; }
+.estado { padding: 4px 12px; border-radius: 14px; font-weight: 600; font-size: 0.85em; color: white; display: inline-block; box-shadow: 0 2px 6px rgba(0,0,0,0.15); letter-spacing: 0.3px; }
+.estado.pendiente { background: linear-gradient(135deg, #ffb347, #ff9800); }
+.estado.congelado { background: linear-gradient(135deg, #64b5f6, #2196f3); }
+.estado.completado { background: linear-gradient(135deg, #66bb6a, #43a047); }
+/* NAV INFERIOR */
+.bottom-nav { position: fixed; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-around; background: #fff; border-top: 1px solid #e6e6e6; padding: 8px 0; z-index: 999; }
+.nav-item { color: #333; text-decoration: none; font-size: 12px; text-align: center; transition: all 0.25s ease; }
+.nav-item i { display: block; font-size: 22px; margin-bottom: 3px; transition: transform 0.25s ease, color 0.25s ease; }
+.nav-item:hover { color: #0044FF; transform: scale(1.1); text-shadow: 0 0 6px rgba(15, 234, 245, 0.3); }
+.nav-item:hover i { transform: scale(1.2); color: #0044FF; }
+/* Header */
+header { background: linear-gradient(90deg, #1a237e, #8e24aa); color: white; padding: 15px; font-weight: bold; text-align: center; position: relative; }
+header .volver { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: white; text-decoration: none; }
+/* SweetAlert ancho */
+.swal-wide { width: 350px !important; font-size: 16px; text-align: center; }
+/* Contador estilo */
+.countdown { font-weight: bold; color: #333; }
+
+.filtros-container {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+    overflow-x: auto;             /* Scroll horizontal si no cabe */
+    -webkit-overflow-scrolling: touch;
+}
+
+.barra-filtros {
+    display: inline-flex;
+    gap: 8px;
+    padding: 6px 20px;
+    border-radius: 50px;
+    background: #f1f1f1;
+    scroll-snap-type: x mandatory;
+    overflow-x: auto;
+}
+
+.btn-filtro {
+    flex: 0 0 auto;               /* evita que se estiren */
+    padding: 8px 18px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #333;
+    text-decoration: none;
+    transition: 0.3s;
+    scroll-snap-align: center;
+}
+
+.btn-filtro:hover {
+    background: rgba(0,0,0,0.05);
+}
+
+.btn-filtro.activo {
+    background: linear-gradient(135deg, #1E3CBA, #8E44F7);
+    color: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+@media (max-width: 420px) {
+    .btn-filtro {
+        padding: 6px 14px;
+        font-size: 0.8rem;
+    }
+}
+.barra-filtros a:first-child { margin-left: -20px; }
+.barra-filtros a:last-child { margin-right: -20px; }
+
+</style>
+</head>
+<body>
+
+<header>
+    <a href="/yo" class="volver">Volver</a>
+    <span>Pedidos</span>
+</header>
+<div class="filtros-container">
+    <div class="barra-filtros">
+        <a href="{{ url_for('pedido', filtro='todos') }}" class="btn-filtro {% if filtro=='todos' %}activo{% endif %}">Todos</a>
+        <a href="{{ url_for('pedido', filtro='pendiente') }}" class="btn-filtro {% if filtro=='pendiente' %}activo{% endif %}">Pendiente</a>
+        <a href="{{ url_for('pedido', filtro='congelado') }}" class="btn-filtro {% if filtro=='congelado' %}activo{% endif %}">Congelado</a>
+        <a href="{{ url_for('pedido', filtro='completado') }}" class="btn-filtro {% if filtro=='completado' %}activo{% endif %}">Completado</a>
+    </div>
+</div>
+
+
+<p class="saldo">Saldo actual: <strong id="saldo_usuario">💰 S/ {{ saldo|round(2) }}</strong></p>
+
+{% for pedido in pedidos %}
+<div class="pedido-card" data-id="{{ pedido.id }}">
+    <div class="pedido-header">
+        <span>{{ pedido.nombre }}</span>
+        <span class="estado {{ pedido.estado|lower }}">{{ pedido.estado }}</span>
+    </div>
+    <div class="pedido-body">
+        <div class="pedido-content">
+            <div class="pedido-img-col">
+                {% if pedido.imagen %}
+                    <img src="{{ pedido.imagen }}" alt="Imagen del pedido">
+                {% endif %}
+                <div class="pedido-datos">
+                    <p>Monto: S/ {{ pedido.monto }}</p>
+                    <p>Comisión: S/ {{ pedido.comision }}</p>
+                    <p>Fecha límite: <span class="countdown" data-fecha="{{ pedido.fecha_limite }}" data-id="{{ pedido.id }}"></span></p>
+                </div>
+            </div>
+            <div class="pedido-info">
+                {% if pedido.descripcion %}
+                    <p class="pedido-descripcion">{{ pedido.descripcion }}</p>
+                {% endif %}
+            </div>
+        </div>
+        {% if pedido.estado == 'Pendiente' %}
+            <button class="btn-enviar" onclick="enviarPedido({{ pedido.id }})">ENVIAR PEDIDO</button>
+        {% else %}
+            <button class="btn-enviar" disabled>ENVIADO</button>
+        {% endif %}
+    </div>
+</div>
+{% endfor %}
+
+{% if pedidos|length == 0 %}
+<p>No hay pedidos disponibles</p>
+{% endif %}
+
+<script>
+function enviarPedido(id) {
+    fetch('/api/enviar_pedido', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({id: id})
+    })
+    .then(r => r.json().then(data => ({status: r.status, body: data})))
+    .then(res => {
+        if (res.status === 400 && res.body.mensaje === "saldo_insuficiente") {
+            Swal.fire({
+                icon: 'warning',
+                title: 'Saldo insuficiente',
+                text: 'Necesitas recargar para completar este pedido.',
+                confirmButtonText: 'Aceptar'
+            });
+        } 
+        else if (res.status === 200 && res.body.mensaje === "ok") {
+            Swal.fire({
+                icon: 'success',
+                title: 'Pedido completado',
+                html: `La comisión ha sido añadida a tu saldo.<br><b>Saldo actualizado: S/${res.body.nuevo_saldo.toFixed(2)}</b>`,
+                confirmButtonText: 'Aceptar',
+                customClass: { popup: 'swal-wide' }
+            }).then(() => {
+                // Actualiza saldo
+                const saldoElemento = document.querySelector('#saldo_usuario');
+                if (saldoElemento) saldoElemento.textContent = "S/" + res.body.nuevo_saldo.toFixed(2);
+
+                // Actualiza estado y botón
+                const pedidoCard = document.querySelector(`.pedido-card[data-id='${id}']`);
+                if (pedidoCard) {
+                    const estadoSpan = pedidoCard.querySelector('.estado');
+                    const btn = pedidoCard.querySelector('.btn-enviar');
+                    if (estadoSpan) { estadoSpan.textContent = 'Completado'; estadoSpan.className = 'estado completado'; }
+                    if (btn) { btn.disabled = true; btn.textContent = 'Pedido Completado'; }
+                }
+            });
+        } 
+        else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: res.body.mensaje || 'Ocurrió un problema'
+            });
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        Swal.fire({
+            icon: 'error',
+            title: 'Error de conexión',
+            text: 'No se pudo comunicar con el servidor.'
+        });
+    });
+}
+
+// Contador regresivo y congelar pedidos
+function iniciarCountdowns() {
+    document.querySelectorAll('.countdown').forEach(function(el) {
+        let fechaLimite = new Date(el.dataset.fecha).getTime();
+        let pedidoId = el.dataset.id;
+        let pedidoCard = el.closest('.pedido-card');
+        let estadoSpan = pedidoCard.querySelector('.estado');
+        let botonEnviar = pedidoCard.querySelector('.btn-enviar');
+
+        if (!estadoSpan.classList.contains('pendiente')) return;
+
+        function actualizar() {
+            let ahora = new Date().getTime();
+            let distancia = fechaLimite - ahora;
+
+            if (distancia <= 0) {
+                el.textContent = "Expirado";
+                estadoSpan.textContent = "Congelado";
+                estadoSpan.className = "estado congelado";
+                if (botonEnviar) { botonEnviar.disabled = true; botonEnviar.textContent = "CONGELADO"; }
+
+                // Avisar backend
+                fetch('/api/congelar_pedido', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: pedidoId })
+                }).then(res => res.json()).then(data => console.log(data.mensaje)).catch(err => console.error(err));
+                return;
+            }
+
+            let horas = Math.floor((distancia % (1000*60*60*24)) / (1000*60*60));
+            let minutos = Math.floor((distancia % (1000*60*60)) / (1000*60));
+            let segundos = Math.floor((distancia % (1000*60)) / 1000);
+            el.textContent = horas + "h " + minutos + "m " + segundos + "s";
+            setTimeout(actualizar, 1000);
+        }
+        actualizar();
+    });
+}
+
+iniciarCountdowns();
+</script>
+
+<!-- NAV INFERIOR -->
+<nav class="bottom-nav">
+  <a href="{{ url_for('inicio') }}" class="nav-item"><i class="material-icons">home</i><span>INICIO</span></a>
+  <a href="{{ url_for('pedido') }}" class="nav-item"><i class="material-icons">playlist_add_check</i><span>PEDIDO</span></a>
+  <a href="{{ url_for('mision') }}" class="nav-item"><i class="material-icons">assignment</i><span>MISIÓN</span></a>
+  <a href="{{ url_for('recarga') }}" class="nav-item"><i class="material-icons">payment</i><span>RECARGA</span></a>
+  <a href="{{ url_for('yo') }}" class="nav-item"><i class="material-icons">person</i><span>YO</span></a>
+</nav>
+
+</body>
+</html>

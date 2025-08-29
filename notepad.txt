@@ -1,0 +1,3 @@
+p:p14Hu;.t0GKCEN
+cd /home/Tripol74/paginawed
+unzip otp_login_project.zip

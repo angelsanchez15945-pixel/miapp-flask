@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarjeta Bancaria Vinculante</title>
+    <link rel="icon" href="static/imagenes/titulo.ico" type="image/x-icon">
+<script src="{{ url_for('static', filename='session.js') }}"></script>
+            <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+            <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+            <script src="{{ url_for('static', filename='ping.js') }}"></script>
+    <style>
+
+
+            /* RESPONSIVE */
+            @media (max-width: 700px) {
+              .card-grid { grid-template-columns: 1fr; }
+              .partner-grid { grid-template-columns: repeat(2, 1fr); }
+            }
+
+            /* NAV INFERIOR ------- MOUSE */
+            .bottom-nav {
+              position: fixed;
+              left: 0; right: 0; bottom: 0;
+              display: flex;
+              justify-content: space-around;
+              background: #fff;
+              border-top: 1px solid #e6e6e6;
+              padding: 8px 0;
+              z-index: 999;
+            }
+
+            .nav-item {
+              color: #333;
+              text-decoration: none;
+              font-size: 12px;
+              text-align: center;
+              transition: all 0.25s ease;
+            }
+
+            .nav-item i {
+              display: block;
+              font-size: 22px;
+              margin-bottom: 3px;
+              transition: transform 0.25s ease, color 0.25s ease;
+            }
+
+            /* EFECTO HOVER ---- MOUSE */
+            .nav-item:hover {
+              color: #0044FF;   /* CAMBIAR DE COLOR */
+              transform: scale(1.1);
+              text-shadow: 0 0 6px rgba(15, 234, 245, 0.3);
+            }
+
+            .nav-item:hover i {
+              transform: scale(1.2);
+              color: #0044FF;  /* CAMBIAR DE COLOR */
+            }
+
+
+
+
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #f3f6fb, #ffffff);
+    margin: 0;
+    padding: 0;
+}
+
+/* HEADER */
+header {
+    background: linear-gradient(90deg, #1a237e, #8e24aa);
+    color: white;
+    padding: 15px;
+    font-weight: bold;
+    text-align: center;
+    position: relative;
+}
+header .volver {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: white;
+    text-decoration: none;
+}
+
+/* CONTENEDOR */
+.container {
+    max-width: 500px;
+    margin: 25px auto 80px;
+    padding: 0 20px;
+    text-align: center;
+}
+
+/* TARJETA BANCARIA */
+.bank-card {
+    background: linear-gradient(135deg, #2e3b8e, #8b4de8);
+    color: white;
+    border-radius: 15px;
+    padding: 25px;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    position: relative;
+    overflow: hidden;
+}
+.bank-card {
+    background: linear-gradient(135deg, #2e3b8e, #8b4de8);
+    color: white;
+    border-radius: 15px;
+    padding: 40px 25px; /* más alto arriba y abajo */
+    width: 95%;
+    min-height: 200px; /* altura mínima */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    position: relative;
+    overflow: hidden;
+}
+
+.bank-card h3 {
+    margin: 0;
+    font-size: 20px;
+    letter-spacing: 1px;
+}
+.chip {
+    width: 50px;
+    height: 35px;
+    background: gold;
+    border-radius: 6px;
+    margin: 15px 0;
+}
+.card-number {
+    margin: 20px 0 10px;
+    font-size: 20px;
+    letter-spacing: 2px;
+}
+.card-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+/* FORMULARIO */
+h2 {
+    text-align: center;
+    font-size: 18px;
+    color: #333;
+    margin: 25px 0 15px;
+}
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+button {
+    width: 100%;
+    background-color: #052c7c;
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 25px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+button:hover {
+    background-color: #041f59;
+}
+
+/* LOGOS */
+.payment-logos {
+    margin-top: 20px;
+}
+.payment-logos img {
+    width: 80%;
+    max-width: 450px;
+    border-radius: 8px;
+}
+
+/* NOTA */
+.note {
+    font-size: 12px;
+    color: #555;
+    text-align: center;
+    margin-top: 15px;
+    padding: 0 10px;
+}
+
+/* NAV INFERIOR */
+.bottom-nav {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    display: flex;
+    justify-content: space-around;
+    background: #fff;
+    border-top: 1px solid #e6e6e6;
+    padding: 8px 0;
+    z-index: 999;
+}
+.nav-item {
+    color: #333;
+    text-decoration: none;
+    font-size: 12px;
+    text-align: center;
+    transition: all 0.25s ease;
+}
+.nav-item i {
+    display: block;
+    font-size: 22px;
+    margin-bottom: 3px;
+    transition: transform 0.25s ease, color 0.25s ease;
+}
+.nav-item:hover {
+    color: #0044FF;
+    transform: scale(1.1);
+    text-shadow: 0 0 6px rgba(15, 234, 245, 0.3);
+}
+.nav-item:hover i {
+    transform: scale(1.2);
+    color: #0044FF;
+}
+
+
+    </style>
+</head>
+<body>
+
+<header>
+    <a href="/yo" class="volver"> Volver</a>
+    <span>Tarjeta</span>
+</header>
+
+<div class="container">
+
+    <!-- Tarjeta visual -->
+    <div class="bank-card">
+        <h3>BANCO DE EJEMPLO</h3>
+        <div class="chip"></div>
+        <div class="card-number">**** **** **** 1234</div>
+        <div class="card-footer">
+            <span>TITULAR</span>
+            <span>MM/AA</span>
+        </div>
+    </div>
+
+    <!-- Formulario -->
+    <h2>INFORMACIÓN DE SU TARJETA BANCARIA</h2>
+    <form action="/guardar_tarjeta" method="POST">
+        <div class="form-group">
+            <input type="text" name="banco" placeholder="Nombre del banco" required>
+        </div>
+        <div class="form-group">
+            <input type="text" name="numero_cuenta" placeholder="Número de cuenta" required>
+        </div>
+        <div class="form-group">
+            <input type="text" name="cci" placeholder="CCI" required>
+        </div>
+        <div class="form-group">
+            <input type="text" name="nombre_titular" placeholder="Nombre" required>
+        </div>
+        <div class="form-group">
+            <input type="password" name="contrasena_fondo" placeholder="Ingrese la contraseña del fondo" required>
+        </div>
+        <button type="submit">ACEPTAR PARA MODIFICAR</button>
+
+        <!-- Imagen de logos de pago -->
+        <div class="payment-logos">
+            <img src="{{ url_for('static', filename='imagenes/metodos_pago.png') }}" alt="Métodos de pago">
+        </div>
+    </form>
+
+    <p class="note">
+        Estimado usuario, para proteger sus fondos, no ingrese la contraseña de su tarjeta bancaria. 
+        Nuestro personal nunca le pedirá que ingrese la contraseña de su tarjeta bancaria.
+    </p>
+</div>
+
+
+
+            <!-- NAV INFERIOR -->
+            <nav class="bottom-nav">
+              <a href="{{ url_for('inicio') }}" class="nav-item"><i class="material-icons">home</i><span>INICIO</span></a>
+              <a href="{{ url_for('pedido') }}" class="nav-item"><i class="material-icons">playlist_add_check</i><span>PEDIDO</span></a>
+              <a href="{{ url_for('mision') }}" class="nav-item"><i class="material-icons">assignment</i><span>MISIÓN</span></a>
+              <a href="{{ url_for('recarga') }}" class="nav-item"><i class="material-icons">payment</i><span>RECARGA</span></a>
+              <a href="{{ url_for('yo') }}" class="nav-item"><i class="material-icons">person</i><span>YO</span></a>
+            </nav>
+</body>
+</html>

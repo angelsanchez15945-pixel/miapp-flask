@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recargar Dinero</title>
+        <link rel="icon" href="static/imagenes/titulo.ico" type="image/x-icon">
+<script src="{{ url_for('static', filename='session.js') }}"></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+        <script src="{{ url_for('static', filename='ping.js') }}"></script>
+<style>
+    /* RESPONSIVE */
+        @media (max-width: 700px) {
+          .card-grid { grid-template-columns: 1fr; }
+          .partner-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* NAV INFERIOR ------- MOUSE */
+        .bottom-nav {
+          position: fixed;
+          left: 0; right: 0; bottom: 0;
+          display: flex;
+          justify-content: space-around;
+          background: #fff;
+          border-top: 1px solid #e6e6e6;
+          padding: 8px 0;
+          z-index: 999;
+        }
+
+        .nav-item {
+          color: #333;
+          text-decoration: none;
+          font-size: 12px;
+          text-align: center;
+          transition: all 0.25s ease;
+        }
+
+        .nav-item i {
+          display: block;
+          font-size: 22px;
+          margin-bottom: 3px;
+          transition: transform 0.25s ease, color 0.25s ease;
+        }
+
+        /* EFECTO HOVER ---- MOUSE */
+        .nav-item:hover {
+          color: #0044FF;   /* CAMBIAR DE COLOR */
+          transform: scale(1.1);
+          text-shadow: 0 0 6px rgba(15, 234, 245, 0.3);
+        }
+
+        .nav-item:hover i {
+          transform: scale(1.2);
+          color: #0044FF;  /* CAMBIAR DE COLOR */
+        }
+
+
+
+
+
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: linear-gradient(to bottom, #eef2f7, #ffffff);
+    }
+         /* ----------------------Boton volver */
+        header {
+            background: linear-gradient(90deg, #1a237e, #8e24aa);
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            text-align: center; /* mantiene el texto centrado */
+            position: relative; /* necesario para posicionar el enlace */
+        }
+
+        header .volver {
+            position: absolute;
+            left: 15px; /* margen desde el borde izquierdo */
+            top: 50%;
+            transform: translateY(-50%); /* lo centra verticalmente */
+            color: white; /* o el color que quieras */
+            text-decoration: none;
+        }
+
+    .container {
+        max-width: 500px;
+        margin: 30px auto;
+        background: white;
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    label {
+        font-weight: bold;
+        display: block;
+        margin-bottom: 8px;
+        color: #333;
+    }
+    .input-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        overflow: hidden;
+    }
+    .input-group span {
+        background: #f4f4f4;
+        padding: 10px;
+        font-weight: bold;
+        color: #555;
+    }
+    .input-group input {
+        border: none;
+        flex: 1;
+        padding: 10px;
+        font-size: 14px;
+        outline: none;
+    }
+    .amounts {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+    .amounts button {
+        padding: 12px;
+        font-size: 16px;
+        border: 1px solid #ccc;
+        background: white;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .amounts button:hover {
+        background: #f0f4ff;
+        border-color: #4b6cff;
+        color: #4b6cff;
+    }
+    .payment-methods {
+        margin-bottom: 20px;
+    }
+    .method {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    .method:hover {
+        background: #f8faff;
+        border-color: #4b6cff;
+    }
+    .method input {
+        transform: scale(1.2);
+    }
+    button.submit {
+        width: 100%;
+        padding: 12px;
+        background: #0a62d0;
+        color: white;
+        border: none;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    button.submit:hover {
+        background: #084c9e;
+    }
+    .notes {
+        margin-top: 15px;
+        font-size: 12px;
+        background: #f4f7fc;
+        padding: 10px;
+        border-radius: 8px;
+        color: #555;
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <a href="/yo" class="volver"> Volver</a>
+    <span>Recargar</span>
+</header>
+
+
+
+
+<div class="container">
+    <form action="/guardar_recarga" method="POST">
+        <label>Cantidad de recarga</label>
+        <div class="input-group">
+            <span>S/</span>
+            <input type="number" name="monto" placeholder="Ingrese el monto a transferir" required>
+        </div>
+
+        <div class="amounts">
+            <button type="button" onclick="seleccionarMonto(10)">10</button>
+            <button type="button" onclick="seleccionarMonto(30)">30</button>
+            <button type="button" onclick="seleccionarMonto(100)">100</button>
+            <button type="button" onclick="seleccionarMonto(300)">300</button>
+            <button type="button" onclick="seleccionarMonto(1000)">1000</button>
+            <button type="button" onclick="seleccionarMonto(3000)">3000</button>
+            <button type="button" onclick="seleccionarMonto(10000)">10000</button>
+        </div>
+
+        <label>Elija un método de pago</label>
+        <div class="payment-methods">
+            <label class="method">
+                <input type="radio" name="metodo_pago" value="sixxpay" checked>
+                yape y plin (S/1 ~ S/500)
+            </label>
+            <label class="method">
+                <input type="radio" name="metodo_pago" value="banco">
+                banco (S/1000 ~ S/999999)
+            </label>
+        </div>
+
+        <button class="submit" type="submit">Aceptar</button>
+
+        <div class="notes">
+            *1. El importe debe coincidir con el pedido, de lo contrario no llegará automáticamente a su cuenta.<br>
+            *2. Si no recibe el dinero, contacte a su supervisor o servicio al cliente.<br>
+            *3. Las tareas de la plataforma tienen límite de tiempo y se actualizan cada mañana.
+        </div>
+    </form>
+</div>
+
+<script>
+function seleccionarMonto(valor) {
+    document.querySelector('input[name="monto"]').value = valor;
+}
+</script>
+
+
+            <!-- NAV INFERIOR -->
+            <nav class="bottom-nav">
+              <a href="{{ url_for('inicio') }}" class="nav-item"><i class="material-icons">home</i><span>INICIO</span></a>
+              <a href="{{ url_for('pedido') }}" class="nav-item"><i class="material-icons">playlist_add_check</i><span>PEDIDO</span></a>
+              <a href="{{ url_for('mision') }}" class="nav-item"><i class="material-icons">assignment</i><span>MISIÓN</span></a>
+              <a href="{{ url_for('recarga') }}" class="nav-item"><i class="material-icons">payment</i><span>RECARGA</span></a>
+              <a href="{{ url_for('yo') }}" class="nav-item"><i class="material-icons">person</i><span>YO</span></a>
+            </nav>
+
+
+</body>
+</html>

@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perfil</title>
+        <link rel="icon" href="static/imagenes/titulo.ico" type="image/x-icon">
+<script src="{{ url_for('static', filename='session.js') }}"></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+        <script src="{{ url_for('static', filename='ping.js') }}"></script>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #f5f7fa;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* CABECERA */
+    .header {
+        background: linear-gradient(90deg, #1d4ed8, #8b5cf6);
+        border-radius: 12px;
+        margin: 10px;
+        color: white;
+        padding: 15px;
+        position: relative;
+    }
+    .header-top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .profile-img {
+        width: 80px;
+        height: 70px;
+        border-radius: 50%;
+        background: url('https://via.placeholder.com/60') center/cover;
+    }
+    .header-info {
+        flex: 1;
+        margin-left: 10px;
+    }
+    .header-info h2 {
+        margin: 0;
+        font-size: 18px;
+    }
+    .header-info p {
+        margin: 2px 0;
+        font-size: 13px;
+    }
+    .copy-btn {
+        background: #a855f7;
+        padding: 4px 8px;
+        border-radius: 6px;
+        font-size: 12px;
+        cursor: pointer;
+        display: inline-block;
+    }
+    .credit-circle {
+        background: white;
+        color: #000;
+        border-radius: 50%;
+        padding: 12px;
+        text-align: center;
+        font-size: 14px;
+        width: 60px;
+        height: 60px;
+        border: 2px solid #1d4ed8;
+    }
+     /* SALDO */
+    .balance-card {
+    background: white;
+    border-radius: 0 0 12px 12px;
+    margin: -10px 10px 10px;
+    padding: 15px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    text-align: center;
+    }
+    .balance-card h3 {
+        margin: 0;
+    }
+    .balance-values {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+    }
+    .balance-item {
+        flex: 1;
+        text-align: center;
+    }
+    .balance-item span {
+        display: block;
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .balance-item small {
+        display: block;
+        font-size: 12px;
+        color: gray;
+    }
+    .balance-green { color: green; }
+    .balance-red { color: red; }
+    .divider {
+        width: 1px;
+        height: 30px;
+        background: #ddd;
+    }
+
+
+    /* MENÚ */
+.menu {
+    margin: 10px;
+    padding-bottom: 80px; /* suficiente para separar del nav */
+}
+
+
+    .menu a {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 14px;
+        margin: 6px 0;
+        background: white;
+        border-radius: 12px;
+        text-decoration: none;
+        color: #0d47a1;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        transition: all 0.2s ease-in-out;
+        
+    }
+    .menu a:hover {
+        background: linear-gradient(90deg, #4e73df, #1cc88a);
+        color: white;
+        transform: scale(1.02);
+    }
+.menu-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: none; /* quitamos el degradado */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px; /* tamaño del emoji */
+}
+
+    .menu-text {
+        flex: 1;
+        margin-left: 12px;
+        font-size: 15px;
+    }
+    .menu-arrow {
+        font-size: 18px;
+        color: #999;
+    }
+
+
+
+
+     /* RESPONSIVE */
+        @media (max-width: 700px) {
+          .card-grid { grid-template-columns: 1fr; }
+          .partner-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* NAV INFERIOR ------- MOUSE */
+.bottom-nav {
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    display: flex;
+    justify-content: space-around;
+    background: #fff;
+    border-top: 1px solid #e6e6e6;
+    padding: 8px 0;
+    z-index: 999; /* debe estar arriba de todo */
+}
+
+
+        .nav-item {
+          color: #333;
+          text-decoration: none;
+          font-size: 12px;
+          text-align: center;
+          transition: all 0.25s ease;
+        }
+
+        .nav-item i {
+          display: block;
+          font-size: 22px;
+          margin-bottom: 3px;
+          transition: transform 0.25s ease, color 0.25s ease;
+        }
+
+        /* EFECTO HOVER ---- MOUSE */
+        .nav-item:hover {
+          color: #0044FF;   /* CAMBIAR DE COLOR */
+          transform: scale(1.1);
+          text-shadow: 0 0 6px rgba(15, 234, 245, 0.3);
+        }
+
+        .nav-item:hover i {
+          transform: scale(1.2);
+          color: #0044FF;  /* CAMBIAR DE COLOR */
+        }
+
+@media (max-width: 700px) {
+    .menu {
+        margin-bottom: 80px; /* espacio extra para que nav no lo tape */
+    }
+}
+
+
+
+</style>
+</head>
+<body>
+
+<!-- CABECERA -->
+<div class="header">
+    <div class="header-top">
+        <img class="profile-img" src="{{ url_for('static', filename='imagenes/login1.png') }}"alt="Foto de perfil">
+
+        <div class="header-info">
+            <h2>{{ phone }}</h2>
+            <p>Nivel VIP: {{ vip_nivel }}</p>
+            <span class="copy-btn" onclick="navigator.clipboard.writeText('{{ phone }}')">copiar teléfono</span>
+        </div>
+
+        <div class="credit-circle">
+            <br>Crédito:<br><b>100%</b>
+        </div>
+    </div>
+</div>
+
+<!-- SALDO -->
+<div class="balance-card">
+    <h3>💰 Saldo: S/{{ saldo }}</h3>
+    <p>Mi saldo</p>
+
+ 
+</div>
+
+
+<!-- MENÚ -->
+<div class="menu">
+    <a href="/retiro">
+        <div class="menu-icon">💸</div>
+        <div class="menu-text">Retirar monedas en efectivo</div>
+        <div class="menu-arrow">›</div>
+    </a>
+    <a href="/informe">
+        <div class="menu-icon">📊</div>
+        <div class="menu-text">Informe del equipo</div>
+        <div class="menu-arrow">›</div>
+    </a>
+    <a href="/historial_recarga">
+        <div class="menu-icon">💳</div>
+        <div class="menu-text">Historial de recarga</div>
+        <div class="menu-arrow">›</div>
+    </a>
+    <a href="/historial_retiro">
+        <div class="menu-icon">🏧</div>
+        <div class="menu-text">Historial de retiro</div>
+        <div class="menu-arrow">›</div>
+    </a>
+    <a href="/detalles">
+        <div class="menu-icon">👤</div>
+        <div class="menu-text">Detalles de la cuenta</div>
+        <div class="menu-arrow">›</div>
+    </a>
+    <a href="/mensajes">
+        <div class="menu-icon">💬</div>
+        <div class="menu-text">Mensaje</div>
+        <div class="menu-arrow">›</div>
+    </a>
+    <a href="/tarjeta">
+        <div class="menu-icon">🏦</div>
+        <div class="menu-text">Tarjeta bancaria vinculante</div>
+        <div class="menu-arrow">›</div>
+    </a>
+    <a href="/modificar_password">
+        <div class="menu-icon">🔑</div>
+        <div class="menu-text">Modificar contraseña</div>
+        <div class="menu-arrow">›</div>
+    </a>
+    <a href="/modificar_password">
+        <div class="menu-icon">🔒</div>
+        <div class="menu-text">Modificar contraseña de retiro</div>
+        <div class="menu-arrow">›</div>
+    </a>
+    <a href="/idioma">
+        <div class="menu-icon">🌐</div>
+        <div class="menu-text">Seleccionar idioma</div>
+        <div class="menu-arrow">›</div>
+    </a>
+    <a href="{{ url_for('logout') }}">
+        <div class="menu-icon">🚪</div>
+        <div class="menu-text">Salir</div>
+        <div class="menu-arrow">›</div>
+    </a>
+</div>
+
+
+
+
+
+            <!-- NAV INFERIOR -->
+            <nav class="bottom-nav">
+              <a href="{{ url_for('inicio') }}" class="nav-item"><i class="material-icons">home</i><span>INICIO</span></a>
+              <a href="{{ url_for('pedido') }}" class="nav-item"><i class="material-icons">playlist_add_check</i><span>PEDIDO</span></a>
+              <a href="{{ url_for('mision') }}" class="nav-item"><i class="material-icons">assignment</i><span>MISIÓN</span></a>
+              <a href="{{ url_for('recarga') }}" class="nav-item"><i class="material-icons">payment</i><span>RECARGA</span></a>
+              <a href="{{ url_for('yo') }}" class="nav-item"><i class="material-icons">person</i><span>YO</span></a>
+            </nav>
+
+
+
+</body>
+</html>

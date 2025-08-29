@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Detalles de la Cuenta</title>
+        <link rel="icon" href="static/imagenes/titulo.ico" type="image/x-icon">
+        <script src="{{ url_for('static', filename='session.js') }}"></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+        <script src="{{ url_for('static', filename='ping.js') }}"></script>
+<style>
+
+
+        /* RESPONSIVE */
+        @media (max-width: 700px) {
+          .card-grid { grid-template-columns: 1fr; }
+          .partner-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* NAV INFERIOR ------- MOUSE */
+        .bottom-nav {
+          position: fixed;
+          left: 0; right: 0; bottom: 0;
+          display: flex;
+          justify-content: space-around;
+          background: #fff;
+          border-top: 1px solid #e6e6e6;
+          padding: 8px 0;
+          z-index: 999;
+        }
+
+        .nav-item {
+          color: #333;
+          text-decoration: none;
+          font-size: 12px;
+          text-align: center;
+          transition: all 0.25s ease;
+        }
+
+        .nav-item i {
+          display: block;
+          font-size: 22px;
+          margin-bottom: 3px;
+          transition: transform 0.25s ease, color 0.25s ease;
+        }
+
+        /* EFECTO HOVER ---- MOUSE */
+        .nav-item:hover {
+          color: #0044FF;   /* CAMBIAR DE COLOR */
+          transform: scale(1.1);
+          text-shadow: 0 0 6px rgba(15, 234, 245, 0.3);
+        }
+
+        .nav-item:hover i {
+          transform: scale(1.2);
+          color: #0044FF;  /* CAMBIAR DE COLOR */
+        }
+
+
+
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background: #f7fafd;
+    }
+         /* ----------------------Boton volver */
+        header {
+            background: linear-gradient(90deg, #1a237e, #8e24aa);
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            text-align: center; /* mantiene el texto centrado */
+            position: relative; /* necesario para posicionar el enlace */
+        }
+
+        header .volver {
+            position: absolute;
+            left: 15px; /* margen desde el borde izquierdo */
+            top: 50%;
+            transform: translateY(-50%); /* lo centra verticalmente */
+            color: white; /* o el color que quieras */
+            text-decoration: none;
+        }
+
+    .container {
+        padding: 15px;
+    }
+    h2 {
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+    .detalle-card {
+        background: white;
+        border-radius: 6px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px;
+        margin-bottom: 10px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .detalle-info {
+        display: flex;
+        flex-direction: column;
+    }
+    .fecha {
+        font-size: 14px;
+        font-weight: bold;
+    }
+    .estado {
+        font-size: 12px;
+        background: #64b5f6;
+        color: white;
+        padding: 3px 6px;
+        border-radius: 4px;
+        margin-top: 5px;
+        display: inline-block;
+    }
+    .monto {
+        font-weight: bold;
+        color: #00c853;
+    }
+</style>
+</head>
+<body>
+
+    <header>
+        <a href="/yo" class="volver"> Volver</a>
+        <span>Detalle de la cuenta</span>
+    </header>
+
+<div class="container">
+    <h2>DETALLES DE LA CUENTA</h2>
+
+    <div class="detalle-card">
+        <div class="detalle-info">
+            <span class="fecha">2025-08-06 09:37:47</span>
+            <span class="estado">El usuario recibe pedidos</span>
+        </div>
+        <span class="monto">S/76</span>
+    </div>
+
+    <div class="detalle-card">
+        <div class="detalle-info">
+            <span class="fecha">2025-08-06 09:37:47</span>
+            <span class="estado">Reembolso en pedidos</span>
+        </div>
+        <span class="monto">S/38</span>
+    </div>
+
+    <!-- Puedes duplicar estos bloques para más registros -->
+</div>
+
+
+            <!-- NAV INFERIOR -->
+            <nav class="bottom-nav">
+              <a href="{{ url_for('inicio') }}" class="nav-item"><i class="material-icons">home</i><span>INICIO</span></a>
+              <a href="{{ url_for('pedido') }}" class="nav-item"><i class="material-icons">playlist_add_check</i><span>PEDIDO</span></a>
+              <a href="{{ url_for('mision') }}" class="nav-item"><i class="material-icons">assignment</i><span>MISIÓN</span></a>
+              <a href="{{ url_for('recarga') }}" class="nav-item"><i class="material-icons">payment</i><span>RECARGA</span></a>
+              <a href="{{ url_for('yo') }}" class="nav-item"><i class="material-icons">person</i><span>YO</span></a>
+            </nav>
+
+
+</body>
+</html>

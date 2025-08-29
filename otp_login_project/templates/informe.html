@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Informe del equipo</title>
+<link rel="icon" href="static/imagenes/titulo.ico" type="image/x-icon">
+<script src="{{ url_for('static', filename='session.js') }}"></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+        <script src="{{ url_for('static', filename='ping.js') }}"></script>
+<style>
+
+
+        /* RESPONSIVE */
+        @media (max-width: 700px) {
+          .card-grid { grid-template-columns: 1fr; }
+          .partner-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* NAV INFERIOR ------- MOUSE */
+        .bottom-nav {
+          position: fixed;
+          left: 0; right: 0; bottom: 0;
+          display: flex;
+          justify-content: space-around;
+          background: #fff;
+          border-top: 1px solid #e6e6e6;
+          padding: 8px 0;
+          z-index: 999;
+        }
+
+        .nav-item {
+          color: #333;
+          text-decoration: none;
+          font-size: 12px;
+          text-align: center;
+          transition: all 0.25s ease;
+        }
+
+        .nav-item i {
+          display: block;
+          font-size: 22px;
+          margin-bottom: 3px;
+          transition: transform 0.25s ease, color 0.25s ease;
+        }
+
+        /* EFECTO HOVER ---- MOUSE */
+        .nav-item:hover {
+          color: #0044FF;   /* CAMBIAR DE COLOR */
+          transform: scale(1.1);
+          text-shadow: 0 0 6px rgba(15, 234, 245, 0.3);
+        }
+
+        .nav-item:hover i {
+          transform: scale(1.2);
+          color: #0044FF;  /* CAMBIAR DE COLOR */
+        }
+
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background: #f5f7fa;
+    }
+    /* ----------------------Boton volver */
+        header {
+            background: linear-gradient(90deg, #1a237e, #8e24aa);
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            text-align: center; /* mantiene el texto centrado */
+            position: relative; /* necesario para posicionar el enlace */
+        }
+
+        header .volver {
+            position: absolute;
+            left: 15px; /* margen desde el borde izquierdo */
+            top: 50%;
+            transform: translateY(-50%); /* lo centra verticalmente */
+            color: white; /* o el color que quieras */
+            text-decoration: none;
+        }
+
+    .tabs {
+        display: flex;
+        justify-content: space-around;
+        background: #002b80;
+        padding: 8px 0;
+        border-radius: 20px;
+        margin: 10px auto;
+        max-width: 600px;
+        color: white;
+        font-size: 14px;
+    }
+    .tab {
+        cursor: pointer;
+    }
+    .tab.active {
+        font-weight: bold;
+        text-decoration: underline;
+    }
+    .section {
+        background: white;
+        max-width: 600px;
+        margin: 10px auto;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    }
+    .section h3 {
+        margin: 0;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .ratio {
+        font-size: 12px;
+        color: white;
+        padding: 2px 6px;
+        border-radius: 12px;
+        margin-left: 6px;
+    }
+    .ratio-blue { background: #3498db; }
+    .ratio-green { background: #2ecc71; }
+    .ratio-red { background: #e74c3c; }
+    .section p {
+        font-size: 14px;
+        margin: 5px 0;
+        color: #555;
+    }
+    .right {
+        color: #002b80;
+        font-weight: bold;
+    }
+
+    /* NAV INFERIOR ------- MOUSE*/
+    .bottom-nav {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      display: flex; justify-content: space-around;
+      background: #fff; border-top: 1px solid #e6e6e6;
+      padding: 8px 0; z-index: 999;
+    }
+    .nav-item {
+      color: #333;
+      text-decoration: none;
+      font-size: 12px;
+      text-align: center;
+      transition: all 0.25s ease;
+    }
+    .nav-item i {
+      display: block;
+      font-size: 22px;
+      margin-bottom: 3px;
+      transition: transform 0.25s ease, color 0.25s ease;
+    }
+
+    /* EFECTO HOVER ---- MOUSE*/
+    .nav-item:hover {
+      color: var(--accent);
+      transform: scale(1.1);
+      text-shadow: 0 0 6px rgba(0,51,204,0.3);
+    }
+    .nav-item:hover i {
+      transform: scale(1.2);
+      color: var(--accent);
+    }
+</style>
+</head>
+<body>
+
+<header>
+    <a href="/yo" class="volver"> Volver</a>
+    <span>Informe de Equipo</span>
+</header>
+
+<div class="tabs">
+    <div class="tab active">TODOS</div>
+    <div class="tab">HOY</div>
+    <div class="tab">AYER</div>
+    <div class="tab">ESTA SEMANA</div>
+</div>
+
+<div class="section">
+    <h3>Todos los datos <span class="right">S/ 63.7</span></h3>
+    <p>0<br>Número de equipo</p>
+    <p class="right">S/ 0</p>
+    <p>Comisión de pedido del equipo</p>
+</div>
+
+<div class="section">
+    <h3>Nivel 1 <span class="ratio ratio-blue">Ratio 14%</span> <span class="right">S/ 0</span></h3>
+    <p>0<br>Número de equipo</p>
+    <p class="right">S/ 0</p>
+    <p>Comisión de pedido del equipo</p>
+</div>
+
+<div class="section">
+    <h3>Nivel 2 <span class="ratio ratio-green">Ratio 7%</span> <span class="right">S/ 0</span></h3>
+    <p>0<br>Número de equipo</p>
+    <p class="right">S/ 0</p>
+    <p>Comisión de pedido del equipo</p>
+</div>
+
+<div class="section">
+    <h3>Tres niveles <span class="ratio ratio-red">Ratio 1%</span> <span class="right">S/ 0</span></h3>
+    <p>0<br>Número de equipo</p>
+    <p class="right">S/ 0</p>
+    <p>Comisión de pedido del equipo</p>
+</div>
+
+
+
+            <!-- NAV INFERIOR -->
+            <nav class="bottom-nav">
+              <a href="{{ url_for('inicio') }}" class="nav-item"><i class="material-icons">home</i><span>INICIO</span></a>
+              <a href="{{ url_for('pedido') }}" class="nav-item"><i class="material-icons">playlist_add_check</i><span>PEDIDO</span></a>
+              <a href="{{ url_for('mision') }}" class="nav-item"><i class="material-icons">assignment</i><span>MISIÓN</span></a>
+              <a href="{{ url_for('recarga') }}" class="nav-item"><i class="material-icons">payment</i><span>RECARGA</span></a>
+              <a href="{{ url_for('yo') }}" class="nav-item"><i class="material-icons">person</i><span>YO</span></a>
+            </nav>
+</body>
+</html>

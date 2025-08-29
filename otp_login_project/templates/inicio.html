@@ -1,0 +1,672 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title >Inicio</title>
+<link rel="icon" href="static/imagenes/titulo.ico" type="image/x-icon">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="{{ url_for('static', filename='ping.js') }}"></script>
+<script src="{{ url_for('static', filename='ping.js') }}"></script>
+
+
+<script src="{{ url_for('static', filename='session.js') }}"></script>
+
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+<style>
+:root {
+  --accent: #003399;
+  --blue: #002b80;
+  --card-bg: #fff;
+  --bg: #f5f6fa;
+  --scroll-duration: 8s;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: "Roboto", Arial, sans-serif;
+  background: var(--bg);
+  color: #222;
+}
+
+/* HEADER */
+.header {
+  background: var(--accent);
+  color: #fff;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 700;
+  justify-content: center;
+}
+.header img { width: 26px; height: 26px; }
+
+
+
+
+/* SLIDER */
+.slider {
+  width: 100%;        /* Ocupa todo el ancho disponible */
+  max-width: 80%;    /* Quita el límite del 75% */
+  aspect-ratio: 16/9; /* Mantiene proporción adaptable */
+  margin: 12px auto;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.slides {
+  display: flex;
+  transition: transform 0.5s ease; /* transición más suave */
+  width: 100%;
+}
+
+.slides img {
+  width: 100%;         /* La imagen ocupa todo el ancho */
+  height: 100%;        /* La imagen ocupa todo el alto del slider */
+  object-fit: cover;   /* Recorta proporcionalmente sin deformar */
+  flex-shrink: 0;      /* No se encoge */
+}
+
+/* RESPONSIVE: ajusta alto en móviles */
+@media (max-width: 600px) {
+  .slider {
+    aspect-ratio: 16/10; /* un poco más alto en móviles */
+  }
+}
+
+
+@keyframes slide {
+  0%, 16% { transform: translateX(0); }
+  20%, 36% { transform: translateX(-100%); }
+  40%, 56% { transform: translateX(-200%); }
+  60%, 76% { transform: translateX(-300%); }
+  80%, 96% { transform: translateX(-400%); }
+  100% { transform: translateX(0); }
+}
+
+
+
+/* CONTENEDOR PRINCIPAL */
+.main-container {
+  max-width: 75%;
+  margin: auto;
+  padding: 0 12px 80px;
+}
+.notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #fff;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  margin-top: 12px;
+}
+.notice marquee { flex: 1; font-size: 14px; }
+
+/* BOTONES ACCIÓN */
+.top-actions { display: flex; gap: 12px; margin: 18px 0; }
+.action-card {
+  flex: 1;
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+  text-decoration: none;
+  color: var(--accent);
+}
+
+/* SALDO */
+.saldo-card {
+  background: var(--card-bg);
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.saldo-header {
+  background: var(--blue);
+  color: #fff;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 700;
+}
+.saldo-body { padding: 18px; text-align: center; }
+
+/* VISUALIZACIÓN INGRESOS */
+.card {
+  margin: 18px 0;
+  border-radius: 10px;
+  overflow: hidden;
+  background: var(--card-bg);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}
+.card .card-header {
+  background: var(--blue);
+  color: #fff;
+  padding: 10px 14px;
+  font-weight: 700;
+}
+.card-body { padding: 10px 14px; }
+.scroll-container {
+  height: 160px;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #fff;
+  padding: 8px;
+}
+.scroll-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: scrollUp var(--scroll-duration) linear infinite;
+}
+@keyframes scrollUp {
+  0% { transform: translateY(0); }
+  100% { transform: translateY(-50%); }
+}
+.scroll-container:hover .scroll-content { animation-play-state: paused; }
+.income-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 6px;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 14px;
+}
+.income-left { display: flex; align-items: center; gap: 8px; }
+.user-icon { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; }
+.amount { color: #e53935; font-weight: 700; }
+.date { color: #888; font-size: 13px; }
+
+/* CARDS */
+.card-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; padding: 10px 0; }
+.card-item { background: #f6f7fb; padding: 12px; border-radius: 8px; text-align: center; font-weight: 700; }
+
+.partner-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; padding: 10px 0; }
+.partner-grid img { width: 100%; height: 64px; object-fit: contain; background: #fff; padding: 6px; border-radius: 8px; }
+
+
+
+/* RESPONSIVE */
+        @media (max-width: 700px) {
+          .card-grid { grid-template-columns: 1fr; }
+          .partner-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        /* NAV INFERIOR ------- MOUSE */
+        .bottom-nav {
+          position: fixed;
+          left: 0; right: 0; bottom: 0;
+          display: flex;
+          justify-content: space-around;
+          background: #fff;
+          border-top: 1px solid #e6e6e6;
+          padding: 8px 0;
+          z-index: 999;
+        }
+
+        .nav-item {
+          color: #333;
+          text-decoration: none;
+          font-size: 12px;
+          text-align: center;
+          transition: all 0.25s ease;
+        }
+
+        .nav-item i {
+          display: block;
+          font-size: 22px;
+          margin-bottom: 3px;
+          transition: transform 0.25s ease, color 0.25s ease;
+        }
+
+        /* EFECTO HOVER ---- MOUSE */
+        .nav-item:hover {
+          color: #0044FF;   /* CAMBIAR DE COLOR */
+          transform: scale(1.1);
+          text-shadow: 0 0 6px rgba(15, 234, 245, 0.3);
+        }
+
+        .nav-item:hover i {
+          transform: scale(1.2);
+          color: #0044FF;  /* CAMBIAR DE COLOR */
+        }
+
+
+
+
+
+
+/* Contenedor del botón flotante  WHATSSAP TELEGRAM*/
+.fab-container {
+    position: absolute;
+    right: 20px;
+    z-index: 1000;
+    transition: top 0.3s ease; /* Movimiento suave al hacer scroll */
+    animation: float 3s ease-in-out infinite; /* 👈 Efecto flotante */
+}
+
+/* Animación de flotación */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+/* Botón principal */
+.fab {
+    background: #0d6efd;
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+}
+
+/* Opciones ocultas */
+.fab-options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.fab-option {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+    transform: translateY(20px);
+    opacity: 0;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.fab-option img {
+    width: 60%;
+    height: 60%;
+}
+
+/* Activo = opciones visibles */
+.fab-container.active .fab-option {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+
+
+
+</style>
+</head>
+<body>
+
+
+
+
+<!-- Botón flotante desplegable -->
+<div class="fab-container">
+    <div class="fab" id="fab-main">
+        <!-- Icono chat -->
+        <svg id="fab-icon-chat" xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" width="28" height="28">
+            <path d="M20 2H4C2.9 2 2 2.9 2 4v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/>
+        </svg>
+        <!-- Icono cerrar -->
+        <svg id="fab-icon-close" xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" width="28" height="28" style="display:none;">
+            <path d="M18.3 5.71L12 12l6.3 6.29-1.42 1.42L12 14.83l-6.29 6.3-1.42-1.42L9.17 12 2.88 5.71 4.3 4.29 12 12.17l7.29-7.3z"/>
+        </svg>
+    </div>
+    <div class="fab-options">
+        <a href="https://wa.me/51999999999" target="_blank" class="fab-option whatsapp" title="WhatsApp">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+        </a>
+        <a href="https://t.me/tuusuario" target="_blank" class="fab-option telegram" title="Telegram">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/8/82/Telegram_logo.svg" alt="Telegram">
+        </a>
+    </div>
+</div>
+
+
+
+
+
+
+
+<style>
+/* Modal overlay */
+#modalBienvenida {
+    display: none; /* oculto por defecto */
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 10px; /* espacio en móviles */
+}
+
+/* Modal content centrado */
+#modalContent {
+    background: #fff;
+    padding: 20px 25px;
+    border-radius: 15px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    animation: scaleUp 0.5s ease-out;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+}
+
+/* Animación de escala */
+@keyframes scaleUp {
+    from { transform: scale(0.7); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+/* Cerrar modal */
+#cerrarModal {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 22px;
+    cursor: pointer;
+    color: #002366;
+}
+
+/* Título y mensaje */
+#modalContent h2 {
+    color: #002366;
+    margin-bottom: 10px;
+    font-size: 1.4em;
+}
+
+#modalContent p {
+    color: #333;
+    font-size: 1em;
+}
+
+/* Responsive */
+@media (max-width: 450px) {
+    #modalContent {
+        padding: 15px 20px;
+    }
+    #modalContent h2 {
+        font-size: 1.2em;
+    }
+    #modalContent p {
+        font-size: 0.95em;
+    }
+    #cerrarModal {
+        font-size: 20px;
+    }
+}
+</style>
+
+<div id="modalBienvenida">
+    <div id="modalContent">
+        <span id="cerrarModal">&times;</span>
+        <h2>¡Hola, {{ session['username'] }}!</h2>
+        <p>Nos alegra verte de nuevo con nosotros!!! Únete a nuestro equipo y podrás ganar fácilmente 200 - 1200 soles en sólo 10 minutos al día</p>
+    </div>
+</div>
+
+<script>
+// Obtener elementos
+const modal = document.getElementById('modalBienvenida');
+const cerrar = document.getElementById('cerrarModal');
+
+// Mostrar modal automáticamente si hay usuario en sesión
+{% if session.get('username') %}
+modal.style.display = 'flex';
+
+// Cerrar automáticamente después de 5 segundos
+setTimeout(() => { modal.style.display = 'none'; }, 5000);
+{% endif %}
+
+// Cerrar al hacer click en la X
+cerrar.onclick = () => { modal.style.display = 'none'; }
+
+// Cerrar al hacer click fuera del contenido
+window.onclick = (e) => { if(e.target == modal) modal.style.display = 'none'; }
+</script>
+
+
+
+
+
+
+
+
+<script>
+const fabContainer = document.querySelector('.fab-container');
+const fabMain = document.getElementById('fab-main');
+const iconChat = document.getElementById('fab-icon-chat');
+const iconClose = document.getElementById('fab-icon-close');
+
+const offsetVertical = -50; // Ajusta si quieres más arriba o abajo
+
+function actualizarPosicion() {
+    let nuevaPos = window.scrollY + (window.innerHeight / 2) + offsetVertical;
+    fabContainer.style.top = nuevaPos + 'px';
+}
+
+actualizarPosicion();
+window.addEventListener('scroll', actualizarPosicion);
+window.addEventListener('resize', actualizarPosicion);
+
+// Click para abrir/cerrar
+fabMain.addEventListener('click', function() {
+    fabContainer.classList.toggle('active');
+    if (fabContainer.classList.contains('active')) {
+        iconChat.style.display = 'none';
+        iconClose.style.display = 'block';
+    } else {
+        iconChat.style.display = 'block';
+        iconClose.style.display = 'none';
+    }
+});
+</script>
+
+
+
+<!-- HEADER -->
+<div class="header">
+  <img src="{{ url_for('static', filename='imagenes/img4.png') }}">
+  WORKGROW &amp; MERCADO INTERNACIONAL
+</div>
+
+<!-- SLIDER -->
+<div class="slider">
+  <div class="slides">
+    <img src="{{ url_for('static', filename='imagenes/img2.png') }}">
+    <img src="{{ url_for('static', filename='imagenes/img3.png') }}">
+    <img src="{{ url_for('static', filename='imagenes/img11.png') }}">
+    <img src="{{ url_for('static', filename='imagenes/img12.png') }}">
+    <img src="{{ url_for('static', filename='imagenes/img1.png') }}">
+  </div>
+</div>
+
+<!-- CONTENIDO -->
+<div class="main-container">
+
+  <div class="notice">
+    <img src="imagenes/img1.png" alt="" style="height:18px;">
+    <marquee scrollamount="4">
+        <i class="material-icons" style="font-size:18px; vertical-align:middle; margin-right:5px; color:#ff5722;">
+            campaign
+        </i>
+        Únete a nuestro equipo y podrás ganar fácilmente 200 - 1200 soles en sólo 10 minutos al día...
+    </marquee>
+</div>
+
+
+  <div class="top-actions">
+
+    <a href="{{ url_for('recarga') }}" class="action-card" href="#">💱 Recargar</a>
+   
+
+    <a href="{{ url_for('retiro') }}" class="action-card" href="#">💳 Retiro</a>
+  </div>
+
+  <div class="saldo-card">
+    <div class="saldo-header"><span>Activos totales</span><span>N° Trabajo: {{ numero_trabajo }}</span></div>
+    <div class="saldo-body"><h4>Mi saldo</h4><h2>💰S/{{ "%.2f"|format(saldo) }}</h2></div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const hoy = new Date();
+  const dia = String(hoy.getDate()).padStart(2, '0');
+  const mes = String(hoy.getMonth() + 1).padStart(2, '0'); // enero = 0
+  const fechaActual = `${dia}-${mes}`;
+
+  document.querySelectorAll('.date').forEach(el => {
+    el.textContent = fechaActual;
+  });
+});
+</script>
+
+  <!-- Visualización ingresos -->
+  <div class="card">
+    <div class="card-header">Visualización de ingresos del agente</div>
+    <div class="card-body">
+      <div class="scroll-container">
+        <div class="scroll-content" id="income-list">
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>52******5631</span></div><div><span class="amount">S/558.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>51******3002</span></div><div><span class="amount">S/1309.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>52******2131</span></div><div><span class="amount">S/926.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>51******4310</span></div><div><span class="amount">S/3621.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>54******9802</span></div><div><span class="amount">S/1400.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>52******9031</span></div><div><span class="amount">S/119.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>52******5635</span></div><div><span class="amount">S/926.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>51******3012</span></div><div><span class="amount">S/5.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>52******2132</span></div><div><span class="amount">S/157.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>51******4330</span></div><div><span class="amount">S/106.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>54******9882</span></div><div><span class="amount">S/600.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>52******9036</span></div><div><span class="amount">S/20.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>52******5631</span></div><div><span class="amount">S/645.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>51******3002</span></div><div><span class="amount">S/1309.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>52******2131</span></div><div><span class="amount">S/926.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>51******4376</span></div><div><span class="amount">S/3621.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>54******9862</span></div><div><span class="amount">S/1800.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>52******9054</span></div><div><span class="amount">S/120.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>52******5600</span></div><div><span class="amount">S/85.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>51******3982</span></div><div><span class="amount">S/10.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>52******2130</span></div><div><span class="amount">S/157.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>51******4443</span></div><div><span class="amount">S/30.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>54******9834</span></div><div><span class="amount">S/15.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+          <div class="income-item"><div class="income-left"><img class="user-icon" src="{{ url_for('static', filename='imagenes/img5.ico') }}"> <span>52******9766</span></div><div><span class="amount">S/30.00</span> <span class="date">{{ fecha_actual }}</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Introducir -->
+  <div class="card">
+    <div class="card-header">Introducir</div>
+    <div class="card-body">
+      <div class="card-grid">
+        <div class="card-item">📚 Plataforma Introducción</div>
+        <div class="card-item">👤 Términos y reglas</div>
+        <div class="card-item">🏢 Perfil de la empresa</div>
+        <div class="card-item">⚖️ Legislación</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Socios -->
+  <div class="card">
+    <div class="card-header">Socios</div>
+    <div class="card-body">
+      <div class="partner-grid">
+        <img src="{{ url_for('static', filename='imagenes/img8.png') }}">
+        <img src="{{ url_for('static', filename='imagenes/img9.png') }}">
+        <img src="{{ url_for('static', filename='imagenes/img10.png') }}">
+        <img src="{{ url_for('static', filename='imagenes/img13.png') }}">
+        <img src="{{ url_for('static', filename='imagenes/img14.png') }}">
+        <img src="{{ url_for('static', filename='imagenes/img15.png') }}">
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- NAV INFERIOR -->
+<nav class="bottom-nav">
+  <a href="{{ url_for('inicio') }}" class="nav-item"><i class="material-icons">home</i><span>INICIO</span></a>
+  <a href="{{ url_for('pedido') }}" class="nav-item"><i class="material-icons">playlist_add_check</i><span>PEDIDO</span></a>
+  <a href="{{ url_for('mision') }}" class="nav-item"><i class="material-icons">assignment</i><span>MISIÓN</span></a>
+  <a href="{{ url_for('recarga') }}" class="nav-item"><i class="material-icons">payment</i><span>RECARGA</span></a>
+  <a href="{{ url_for('yo') }}" class="nav-item"><i class="material-icons">person</i><span>YO</span></a>
+</nav>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  const incomeList = document.getElementById('income-list');
+  if (incomeList) {
+    const originalItems = Array.from(incomeList.children);
+    if (originalItems.length > 0 && !incomeList.dataset.duplicated) {
+      originalItems.forEach(node => incomeList.appendChild(node.cloneNode(true)));
+      incomeList.dataset.duplicated = 'true';
+      const basePerItem = 1.05;
+      const durationSeconds = Math.max(6, Math.round(originalItems.length * basePerItem));
+      incomeList.style.setProperty('--scroll-duration', durationSeconds + 's');
+    }
+  }
+});
+</script>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  const slides = document.querySelector(".slides");
+  const total = document.querySelectorAll(".slides img").length;
+  let index = 0;
+
+  setInterval(() => {
+    index = (index + 1) % total;
+    slides.style.transform = `translateX(-${index * 100}%)`;
+  }, 3000); // cada 3 segundos
+});
+</script>
+
+
+
+
+</body>
+</html>
