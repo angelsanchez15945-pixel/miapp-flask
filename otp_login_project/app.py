@@ -6,7 +6,7 @@ from datetime import datetime, timedelta
 from functools import wraps
 
 app = Flask(__name__)
-app.secret_key = 'supersecretkey'
+app.secret_key = os.environ.get("SECRET_KEY", "una_clave_super_segura_123_2025_only")
 DATABASE = os.path.join(os.path.dirname(__file__), 'database_fixed.db')
 
 UPLOAD_FOLDER = os.path.join(os.path.dirname(__file__), 'static', 'comprobantes')
